@@ -97,6 +97,11 @@ ps: 单元测试没有问题，接口测试unit会报错错误（Test code or te
 
 ##### nginx配置
 ```nginx
+log_format  accesslog  'remote_addr=[$remote_addr] http_x_forward=[$http_x_forwarded_for] time=[$time_local] request=[$request] '
+    'status=[$status] byte=[$bytes_sent] elapsed=[$request_time] refer=[$http_referer] body=[$request_body] '
+    'ua=[$http_user_agent] cookie=[$http_cookie] gzip=[$gzip_ratio] x_from=[$http_x_from] '
+    'msec=[$msec] http_host=[$http_host] http_accept=[$http_accept|$http_accept_encoding|$http_accept_language] '
+    'upstream_response_time=[$upstream_response_time] sent_http_set_cookie=[$sent_http_set_cookie]';
 server {
     listen      80;
     server_name devel.isophp.cn;
