@@ -1,0 +1,7 @@
+{
+    "require": {
+        "phpunit/phpunit": "^5.0",
+        "phalcon/incubator": "^3.2",
+        "filp/whoops": "^2.1"
+    }
+}

@@ -1,0 +1,24 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * Auth: liushuai
+ * Date: 04/01/18
+ * Time: 09:59
+ * Email: ln6265431@163.com
+ */
+
+return [
+    '/test' => [
+        'controller' => 'Index',
+        'action' => 'test',
+        'auth' => 'any',
+    ],
+    '/unauthorized' => [
+        'controller' => 'index',
+        'action' => 'unauthorized',
+    ],
+    '/adminApiGate' => [
+        'controller' => 'Api_handler',
+        'action' => 'index',
+    ],
+];
