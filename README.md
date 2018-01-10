@@ -2,6 +2,10 @@
 本项目为ISOPHP社区网站源码，以开源的方式进行开发，任何感兴趣的人都可以参与进来，共同建设社区。
 ### 项目使用到的技术
 PHP7.2、phalcon72、nginx、mysql5.7、ant design pro、node8.0、npm 5.6
+[phalcon中文教程](https://olddocs.phalconphp.com/zh/latest/)
+[phalcon英文教程](https://olddocs.phalconphp.com/en/latest/index.html)
+[phalcon英文文档](https://docs.phalconphp.com/en/latest/introduction)
+[ant design pro 文档](https://pro.ant.design/docs/getting-started-cn)
 ### 项目初期版本
 先做了一个简单的结构整理，项目的各个细节还需要进一步完善，作为一个起点，前期大家熟悉下项目结构，调整项目的结构，
 形成最终版本后进行具体的业务开发。  
