@@ -22,24 +22,22 @@ class ApiHandlerController extends Controller
      */
     public function indexAction()
     {
-        $module = $this->request->getPost('module');
-        $handler = $this->request->getPost('handler');
-        $method = $this->request->getPost('method');
-        $payload = $this->request->getPost('payload');
-        if (empty($payload)) {
-            $payload = array();
-        }
+        $params = $this->request->getJsonRawBody(true);
+        $module = $params['module'] ?? '';
+        $handler = $params['handler'] ?? '';
+        $method = $params['method'] ?? '';
+        $payload = $params['payload'] ?? array();
         if (empty($module) || empty($method) || empty($handler)) {
             throw new ApiParamErrorException('字段错误');
         }
-
-        $acl = new Acl();
-        if (!$user = $acl->getCurUser()) {
-            throw new ApiParamErrorException('please login');
-        }
-        if (!$acl->checkCurUserApiPermission($module, $method)) {
-            throw new ApiUnauthorizedException('no access to this api');
-        }
+        // todo 添加登录检测和权限校验
+//        $acl = new Acl();
+//        if (!$user = $acl->getCurUser()) {
+//            throw new ApiParamErrorException('please login');
+//        }
+//        if (!$acl->checkCurUserApiPermission($module, $method)) {
+//            throw new ApiUnauthorizedException('no access to this api');
+//        }
 
         $handlerFactory = new HandlerFactory();
         return $handlerFactory->call($module, $handler, $method, $payload);
