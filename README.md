@@ -1,11 +1,19 @@
 ## 项目介绍
 本项目为ISOPHP社区网站源码，以开源的方式进行开发，任何感兴趣的人都可以参与进来，共同建设社区。
 ### 项目使用到的技术
-PHP7.2、phalcon72、nginx、mysql5.7、ant design pro、node8.0、npm 5.6
+PHP7.2、phalcon72、nginx、mysql5.7、ant design pro、node8.0、npm 5.6、redis、  
+jquery、uikit
 [phalcon中文教程](https://olddocs.phalconphp.com/zh/latest/)
 [phalcon英文教程](https://olddocs.phalconphp.com/en/latest/index.html)
 [phalcon英文文档](https://docs.phalconphp.com/en/latest/introduction)
 [ant design pro 文档](https://pro.ant.design/docs/getting-started-cn)
+[ant desing pro 需要的es6和框架dva](https://github.com/dvajs/dva-knowledgemap)
+[uikit文档](https://getuikit.com/docs/introduction)
+[es6教程](http://es6.ruanyifeng.com/)
+[react英文文档](https://reactjs.org/docs/hello-world.html)
+[react中文文档](https://doc.react-china.org/docs/hello-world.html)
+[js文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript)
+[jquery函数面板](http://jquery.cuishifeng.cn/)
 ### 项目初期版本
 先做了一个简单的结构整理，项目的各个细节还需要进一步完善，作为一个起点，前期大家熟悉下项目结构，调整项目的结构，
 形成最终版本后进行具体的业务开发。  
@@ -101,11 +109,6 @@ ps: 单元测试没有问题，接口测试unit会报错错误（Test code or te
 
 ##### nginx配置
 ```nginx
-log_format  accesslog  'remote_addr=[$remote_addr] http_x_forward=[$http_x_forwarded_for] time=[$time_local] request=[$request] '
-    'status=[$status] byte=[$bytes_sent] elapsed=[$request_time] refer=[$http_referer] body=[$request_body] '
-    'ua=[$http_user_agent] cookie=[$http_cookie] gzip=[$gzip_ratio] x_from=[$http_x_from] '
-    'msec=[$msec] http_host=[$http_host] http_accept=[$http_accept|$http_accept_encoding|$http_accept_language] '
-    'upstream_response_time=[$upstream_response_time] sent_http_set_cookie=[$sent_http_set_cookie]';
 server {
     listen      80;
     server_name devel.isophp.cn;
