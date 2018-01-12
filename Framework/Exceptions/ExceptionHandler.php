@@ -76,7 +76,7 @@ class ExceptionHandler
     protected function handleDevelopmentException($di, $e)
     {
         $whoops = new Run();
-        if ($di->getRequest()->isAjax()){ //如果是ajax请求，就返回json数据
+        if ($e instanceof ApiParamErrorException){
             $whoops->pushHandler(new JsonResponseHandler());
             return  $whoops->handleException($e);
         }else{
