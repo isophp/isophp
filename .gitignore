@@ -1,2 +1,14 @@
+# OS and Editor files
+._*
+.DS_Store
+Thumbs.db
 .idea
-vendor
+.project
+.settings
+.tmproj
+*.sublime-project
+*.sublime-workspace
+nbproject
+
+# Composer
+/vendor
