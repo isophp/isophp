@@ -12,3 +12,6 @@ nbproject
 
 # Composer
 /vendor
+
+# Test
+/phpunit.xml
