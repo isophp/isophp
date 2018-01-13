@@ -1,7 +1,7 @@
 ## 项目介绍
 本项目为ISOPHP社区网站源码，以开源的方式进行开发，任何感兴趣的人都可以参与进来，共同建设社区。
 ### 项目使用到的技术
-PHP7.2、phalcon72、nginx、mysql5.7、ant design pro、node8.0、npm 5.6、redis、  
+PHP7.2、[Phalcon3.3.1](https://github.com/phalcon/cphalcon/releases)、nginx、mysql5.7、ant design pro、node8.0、npm 5.6、redis、  
 jquery、uikit  
 [phalcon中文教程](https://olddocs.phalconphp.com/zh/latest/)
 [phalcon英文教程](https://olddocs.phalconphp.com/en/latest/index.html)
