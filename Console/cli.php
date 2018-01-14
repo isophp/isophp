@@ -32,7 +32,7 @@ foreach ($argv as $k => $arg) {
     }
 }
 
-$console = new \Framework\Applications\ConsoleApplication();
+$console = new \TopCms\Framework\Applications\ConsoleApplication();
 
 try {
     // 处理参数
