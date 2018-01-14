@@ -30,7 +30,7 @@ abstract class UnitTestCase extends PhalconTestCase
     public function setUp()
     {
         $di = new \Phalcon\Di();
-        $application = new \Framework\Applications\HttpApplication($di);
+        $application = new \TopCms\Framework\Applications\HttpApplication($di);
         $this->application = $application;
         $this->setDI($di);
     }
