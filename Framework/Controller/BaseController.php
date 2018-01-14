@@ -15,6 +15,14 @@ use Phalcon\Mvc\Controller;
  */
 class BaseController extends Controller
 {
+    public function show404()
+    {
+        $this->dispatcher->forward([
+            'module' => 'Sys',
+            'controller' => 'index',
+            'action' => 'show404',
+        ]);
+    }
     public function successJson($data)
     {
         $this->responseJson($data, 0);

@@ -27,6 +27,9 @@ const menuData = [
         icon: 'dashboard',
         path: 'article',
         children: [{
+            name: '新建文章',
+            path: 'add'
+        },{
             name: '栏目管理',
             path: 'categoryManager',
         }, {

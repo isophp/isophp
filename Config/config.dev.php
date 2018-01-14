@@ -13,6 +13,11 @@ return new \Phalcon\Config([
     'database' => [
         'host'        => '127.0.0.1',
         'username'    => 'root',
-        'password'    => 'mypassword',
-    ]
+        'dbname'      => 'isophp',
+        'password'    => 'ln6265431',
+    ],
+    'article' => [
+        'idSalt' => '&YGFVBI&^%$',
+        'minLength' => 12,
+    ],
 ]);

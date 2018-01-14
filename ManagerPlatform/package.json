@@ -42,7 +42,8 @@
     "react-container-query": "^0.9.1",
     "react-document-title": "^2.0.3",
     "react-dom": "^16.2.0",
-    "react-fittext": "^1.0.0"
+    "react-fittext": "^1.0.0",
+    "wrap-md-editor": "^0.2.20"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.37",

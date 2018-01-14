@@ -2,6 +2,8 @@
     "require": {
         "phpunit/phpunit": "^5.0",
         "phalcon/incubator": "^3.2",
-        "filp/whoops": "^2.1"
+        "filp/whoops": "^2.1",
+        "hashids/hashids": "^2.0",
+        "erusev/parsedown": "^1.6"
     }
 }
