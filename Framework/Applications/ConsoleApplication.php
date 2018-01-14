@@ -23,6 +23,13 @@ class ConsoleApplication extends Console
         }
         parent::__construct($dependencyInjector);
         $this->bindListeners();
+        $this->initial();
+    }
+
+    protected function initial()
+    {
+        $eventManager = $this->getEventsManager();
+        $eventManager->fire('application:initial', $this);
     }
 
     protected function bindListeners()
