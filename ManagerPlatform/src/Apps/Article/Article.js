@@ -15,7 +15,7 @@ export default {
     },
 
     effects: {
-        * add({ payload, callback }, {select, call, put}) {
+        * add({ payload }, {select, call, put}) {
             yield put({
                 type: 'changeLoading',
                 payload: true,
@@ -25,6 +25,9 @@ export default {
                 method: 'add',
                 payload: payload
             });
+            if (!response) {
+                return;
+            }
             yield put({
                 type: 'save',
                 payload: response,
