@@ -6,31 +6,24 @@ import dynamic from 'dva/dynamic';
 import { getRouterData } from './common/router';
 import Authorized from './utils/Authorized';
 import styles from './index.less';
+import AuthorizedRoute from './components/Auth/AuthorizeRoute';
+import UserLayout from './layouts/UserLayout';
+import Login from './components/Login';
 
-const { AuthorizedRoute } = Authorized;
+// const { AuthorizedRoute } = Authorized;
 dynamic.setDefaultLoadingComponent(() => {
   return <Spin size="large" className={styles.globalSpin} />;
 });
 
 function RouterConfig({ history, app }) {
-  const routerData = getRouterData(app);
-  const UserLayout = routerData['/auth'].component;
-  const BasicLayout = routerData['/'].component;
     return (
     <LocaleProvider locale={zhCN}>
       <Router history={history}>
         <Switch>
           <AuthorizedRoute
-            path="/auth"
-            render={props => <UserLayout {...props} />}
-            // authority="guest"
-            redirectPath="/"
-          />
-          <AuthorizedRoute
-            path="/"
-            render={props => <BasicLayout {...props} />}
-            // authority={['admin', 'user']}
-            redirectPath="/auth/login"
+              layout={UserLayout}
+              component={Login}
+              render={props => <UserLayout {...props} />}
           />
         </Switch>
       </Router>
