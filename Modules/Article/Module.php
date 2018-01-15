@@ -8,7 +8,7 @@
  */
 namespace  TopCms\Modules\Article;
 
-use Modules\BaseModule;
+use TopCms\Modules\BaseModule;
 
 class Module extends BaseModule
 {

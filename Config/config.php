@@ -26,6 +26,10 @@ return new \Phalcon\Config([
         // possibly if the web server rewrite rules are changed. This can also be set to a static path.
         'baseUri' => '/',
     ],
+    'article' => [
+        'idSalt' => '&YGFVBI&^%$',
+        'minLength' => 12,
+    ],
     'roles' => [
         'admin',
         'writer',

@@ -8,5 +8,8 @@
  */
 
 return [
-
+    '/article/{id:[a-zA-Z0-9]+}' => [
+        'controller' => 'Index',
+        'action' => 'detail'
+    ]
 ];

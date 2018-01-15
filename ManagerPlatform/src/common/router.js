@@ -86,6 +86,9 @@ export const getRouterData = (app) => {
         '/article/categoryManager': {
             component: dynamicWrapper(app, [], () => import('../routes/Article/CategoryManager')),
         },
+        '/article/add': {
+            component: dynamicWrapper(app, ['Article/Category', 'Article/Article'], () => import('../routes/Article/AddArticle')),
+        },
         '/article/articleManager': {
             component: dynamicWrapper(app, [], () => import('../routes/Article/ArticleManager')),
         },
