@@ -88,6 +88,9 @@ export default class AddArticle extends PureComponent {
                         categoryId: categoryId,
                         status: status,
                         ...fieldsValue
+                    },
+                    success: function () {
+                        message.warn('还没昨完，保存成功,可继续保存生成多分文章!');
                     }
                 }
             );
