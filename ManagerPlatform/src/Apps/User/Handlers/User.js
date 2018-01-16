@@ -14,7 +14,7 @@ export default {
         loading: false,
         currentUser: {
             userInfo: null,
-            auth: null,
+            menu: [],
         },
     },
 
@@ -43,6 +43,7 @@ export default {
                 ...defaultParams,
                 method: 'getCurUser',
             });
+            console.log(response);
             yield put({
                 type: 'saveCurrentUser',
                 payload: response.data,

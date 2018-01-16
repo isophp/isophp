@@ -6,7 +6,8 @@ import dynamic from 'dva/dynamic';
 import { getRouterData } from './common/router';
 import Authorized from './utils/Authorized';
 import styles from './index.less';
-import AuthorizedRoute from './components/Auth/AuthorizeRoute';
+import {AuthorizeRouteComponent, setApplication} from './components/Auth/AuthorizeRoute';
+console.log(AuthorizeRouteComponent, setApplication);
 import UserLayout from './layouts/UserLayout';
 import Login from './components/Login';
 
@@ -16,14 +17,13 @@ dynamic.setDefaultLoadingComponent(() => {
 });
 
 function RouterConfig({ history, app }) {
+    setApplication(app);
     return (
     <LocaleProvider locale={zhCN}>
       <Router history={history}>
         <Switch>
-          <AuthorizedRoute
-              layout={UserLayout}
-              component={Login}
-              render={props => <UserLayout {...props} />}
+          <AuthorizeRouteComponent
+              path={'/'}
           />
         </Switch>
       </Router>

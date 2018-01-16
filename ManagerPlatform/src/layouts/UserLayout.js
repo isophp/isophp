@@ -1,11 +1,13 @@
-import React from 'react';
-import { Link, Route } from 'dva/router';
+import React,{createElement} from 'react';
+import { Link, Route, Switch } from 'dva/router';
 import DocumentTitle from 'react-document-title';
 import { Icon } from 'antd';
 import GlobalFooter from '../components/GlobalFooter';
 import styles from './UserLayout.less';
 import logo from '../assets/logo.svg';
 import { getRoutes } from '../utils/utils';
+import Login from '../routes/User/Login';
+
 
 const links = [{
   key: 'help',
@@ -25,16 +27,18 @@ const copyright = <div>Copyright <Icon type="copyright" /> 2018 蚂蚁金服体�
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {
-    const { routerData, location } = this.props;
+    const { menu, location } = this.props;
     const { pathname } = location;
     let title = 'Ant Design Pro';
-    if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - Ant Design Pro`;
+    if (menu[pathname] && menu[pathname].name) {
+      title = `${menu[pathname].name} - Ant Design Pro`;
     }
     return title;
   }
   render() {
-    const { routerData, match } = this.props;
+    console.log('ssssss');
+    const { routerData, match, menu } = this.props;
+    console.log(menu);
     return (
       <DocumentTitle title={this.getPageTitle()}>
         <div className={styles.container}>
@@ -47,18 +51,13 @@ class UserLayout extends React.PureComponent {
             </div>
             <div className={styles.desc}>Ant Design 是西湖区最具影响力的 Web 设计规范</div>
           </div>
-          {
-            getRoutes(match.path, routerData).map(item =>
-              (
-                <Route
-                  key={item.key}
-                  path={item.path}
-                  component={item.component}
-                  exact={item.exact}
+            <Switch>
+            <Route
+                  key={menu.page.path}
+                  path={menu.page.path}
+                  component={(props) => <Login/>}
                 />
-              )
-            )
-          }
+            </Switch>
           <GlobalFooter className={styles.footer} links={links} copyright={copyright} />
         </div>
       </DocumentTitle>
