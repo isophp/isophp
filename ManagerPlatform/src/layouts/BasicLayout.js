@@ -107,8 +107,6 @@ class BasicLayout extends React.PureComponent {
     const {
       currentUser, collapsed, fetchingNotices, notices, routerData,menuData, match, location,
     } = this.props;
-    console.log(menuData,'22222');
-
     const layout = (
       <Layout>
         <SiderMenu

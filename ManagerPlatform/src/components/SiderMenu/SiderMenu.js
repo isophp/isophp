@@ -141,7 +141,6 @@ export default class SiderMenu extends PureComponent {
     if (!menusData) {
       return [];
     }
-    console.log(menusData,'ssssssssssss');
     return menusData
       .filter(item => item.name && !item.hideInMenu)
       .map((item) => {

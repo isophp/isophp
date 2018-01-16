@@ -6,7 +6,6 @@ import styles from './AuthorizeRoute.less';
 import {getRouterData} from "../../common/router";
 import dynamic from "dva/dynamic";
 import {getMenuData} from '../../common/menu';
-console.log(getMenuData(),'sssss');
 let routerDataCache;
 let application;
 const setApplication = (app) => (application = app);
@@ -19,13 +18,15 @@ const dynamicWrapper = (application, models, app, component) => {
     // () => require('module')
     // transformed by babel-plugin-dynamic-import-node-sync
     if (component.toString().indexOf('.then(') < 0) {
-        models.forEach((model) => {
-            const theModel = require(`../../Apps/${app}/Handlers/${model}`).default
-            if (modelNotExisted(application, theModel.namespace)) {
-                // eslint-disable-next-line
-                application.model(theModel);
-            }
-        });
+        if (models && models.length) {
+            models.forEach((model) => {
+                const theModel = require(`../../Apps/${app}/Handlers/${model}`).default
+                if (modelNotExisted(application, theModel.namespace)) {
+                    // eslint-disable-next-line
+                    application.model(theModel);
+                }
+            });
+        }
         return (props) => {
             return createElement(component().default, {
                 ...props,
@@ -33,6 +34,36 @@ const dynamicWrapper = (application, models, app, component) => {
             });
         };
     }
+};
+
+const formatMenuData = (menu) => {
+    return menu.map((item)=>{
+        const result ={
+            ...item,
+            path: item.path.replace(/^\//, '')
+        };
+        if (item.pages) {
+            result.children = formatMenuData(item.pages);
+        }
+        return result;
+    });
+};
+
+const generateRouteData = (menu,routeData) => {
+    return menu.map((item) => {
+        const result = {
+            path: item.path,
+            name: item.name,
+        };
+        if (!item.pages || item.pages.length === 0) {
+            result.component = dynamicWrapper(application, item.handlers, item.app, () => import(`../../Apps/${item.app}/Pages/${item.page}`));
+        }
+        routeData[item.path] = result;
+        if (item.pages) {
+            result.children = generateRouteData(item.pages, routeData)
+        }
+        return result;
+    });
 };
 
 @connect((state) => ({
@@ -54,29 +85,11 @@ class AuthorizeRouteComponent extends Component{
             if (!userInfo) {
                 return <Spin size="large" className={styles.globalSpin} />;
             }
-
+            const menuData = formatMenuData([...menu]);
             const routerData = {};
-            const menuData = [];
-            menu.forEach(function (item,index) {
-                menuData.push({
-                    ...item
-                });
-                console.log(item);
-                if (item.pages) {
-                    menuData[index].children=[];
-                }
-                item.pages.forEach(function (page) {
-                    // todo 重复路由判断
-                    routerData[page.path] = {
-                        path: page.path,
-                        name: page.name,
-                        component: dynamicWrapper(application, page.handlers, page.app, () => import(`../../Apps/${page.app}/Pages/${page.page}`))
-                    };
-                    menuData[index].children.push({
-                        ...page
-                    });
-                });
-            });
+            console.log(menu);
+            generateRouteData(menu, routerData);
+            console.log(menu);
             routerDataCache = routerData;
 
             const render = [];
