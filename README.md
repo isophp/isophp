@@ -1,7 +1,17 @@
 ## Overview
 ISOPHP社区网站正在建设中，欢迎提交PR，共同建设社区。
 
-### Quick Start
+## Prerequisites
+
+```
+# Install PHP,Nodejs,Nginx,Mysql
+# Install composer
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+php composer-setup.php
+```
+
+## Quick Start
 ```
 git clone https://github.com/isophp/isophp.git
 cd isophp && composer install
@@ -10,7 +20,7 @@ npm start
 # optional
 echo '127.0.0.1 devel.isophp.cn' |sudo tee -a /etc/hosts
 ```
-##### nginx参考配置
+#### nginx参考配置
 ```nginx
 server {
     listen      80;
