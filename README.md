@@ -20,39 +20,7 @@ npm start
 # optional
 echo '127.0.0.1 devel.isophp.cn' |sudo tee -a /etc/hosts
 ```
-#### nginx参考配置
-```nginx
-server {
-    listen      80;
-    server_name devel.isophp.cn;
-    root       /ISOPHP/PROJECT/PATH/public; 
-    index       index.php index.html index.htm;
-    charset     utf-8;
-    access_log /NGINX/LOG/PATH/isophp.log accesslog;
 
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-
-    location ~ \.php$ {
-        try_files     $uri =404;
-
-        fastcgi_pass  127.0.0.1:9000;
-        fastcgi_index /index.php;
-
-        include fastcgi_params;
-        fastcgi_split_path_info       ^(.+\.php)(/.+)$;
-        fastcgi_param PATH_INFO       $fastcgi_path_info;
-        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-    }
-
-    location ~ /\.ht {
-        deny all;
-    }
-}
-
-```
 ### 推荐开发环境
 - PHP v7.2 or later
 - Mysql v5.7 or later
@@ -157,3 +125,37 @@ TODO
 ##### log
 1. 对异常进行了捕获，错误会输出到Logs/System-date('Y-m-d').log
 2. 业务开发中如果需要记录日志可以使用 Log::getLogger('日志名')->日志类型(msg)
+
+#### nginx参考配置
+```nginx
+server {
+    listen      80;
+    server_name devel.isophp.cn;
+    root       /ISOPHP/PROJECT/PATH/public; 
+    index       index.php index.html index.htm;
+    charset     utf-8;
+    access_log /NGINX/LOG/PATH/isophp.log accesslog;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        try_files     $uri =404;
+
+        fastcgi_pass  127.0.0.1:9000;
+        fastcgi_index /index.php;
+
+        include fastcgi_params;
+        fastcgi_split_path_info       ^(.+\.php)(/.+)$;
+        fastcgi_param PATH_INFO       $fastcgi_path_info;
+        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+
+```
