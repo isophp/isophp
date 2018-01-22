@@ -37,4 +37,37 @@ return new \Phalcon\Config([
         'User',
         'any'
     ],
+    'menu' => [
+        [
+            'layout' => 'BasicLayout',
+            'path' => '/user',
+            'name' => '用户',
+            'icon' => 'user',
+            'app' => 'User',
+            'pages' => [
+                [
+                    'app' => 'User',
+                    'path' => '/user/manager',
+                    'page' => 'UserManager',
+                    'name' => '用户管理',
+                    'handlers' => ['User'],
+                ]
+            ]
+        ],
+        [
+            'layout' => 'BasicLayout',
+            'path' => '/sys',
+            'name' => '系统',
+            'app' => 'User',
+            'pages' => [
+                [
+                    'app' => 'User',
+                    'path' => '/sys/index',
+                    'page' => 'UserManager',
+                    'name' => '系统状态',
+                    'handlers' => ['User']
+                ]
+            ]
+        ]
+    ]
 ]);

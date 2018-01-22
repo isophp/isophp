@@ -13,30 +13,11 @@ import SiderMenu from '../components/SiderMenu';
 import NotFound from '../routes/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
-import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.svg';
 
 const { Content } = Layout;
 const { AuthorizedRoute } = Authorized;
 
-/**
- * 根据菜单取得重定向地址.
- */
-const redirectData = [];
-const getRedirect = (item) => {
-  if (item && item.children) {
-    if (item.children[0] && item.children[0].path) {
-      redirectData.push({
-        from: `/${item.path}`,
-        to: `/${item.children[0].path}`,
-      });
-      item.children.forEach((children) => {
-        getRedirect(children);
-      });
-    }
-  }
-};
-getMenuData().forEach(getRedirect);
 
 const query = {
   'screen-xs': {
@@ -85,9 +66,6 @@ class BasicLayout extends React.PureComponent {
         isMobile: mobile,
       });
     });
-    this.props.dispatch({
-      type: 'User/getCurUser',
-    });
   }
   getPageTitle() {
     const { routerData, location } = this.props;
@@ -124,10 +102,10 @@ class BasicLayout extends React.PureComponent {
         type: 'Global/fetchNotices',
       });
     }
-  }
+  };
   render() {
     const {
-      currentUser, collapsed, fetchingNotices, notices, routerData, match, location,
+      currentUser, collapsed, fetchingNotices, notices, routerData,menuData, match, location,
     } = this.props;
     const layout = (
       <Layout>
@@ -137,7 +115,7 @@ class BasicLayout extends React.PureComponent {
           // If you do not have the Authorized parameter
           // you will be forced to jump to the 403 interface without permission
           Authorized={Authorized}
-          menuData={getMenuData()}
+          menuData={menuData}
           collapsed={collapsed}
           location={location}
           isMobile={this.state.isMobile}
@@ -171,11 +149,6 @@ class BasicLayout extends React.PureComponent {
                         redirectPath="/exception/403"
                       />
                     )
-                  )
-                }
-                {
-                  redirectData.map(item =>
-                    <Redirect key={item.from} exact from={item.from} to={item.to} />
                   )
                 }
                 <Redirect exact from="/" to="/user/UserManager" />

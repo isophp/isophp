@@ -6,6 +6,7 @@
  */
 namespace TopCms\Apps\User\Handler;
 
+use Phalcon\Di;
 use TopCms\Apps\User\Acl;
 use TopCms\Apps\User\UserInfo;
 use TopCms\Framework\Exceptions\ApiParamErrorException;
@@ -18,6 +19,7 @@ class UserHandler extends BaseHandler
 {
     public function getCurUserAction($params= array())
     {
+        $di = Di::getDefault();
         // 这里进行参数检查
         if (false) {
             // 参数错误，抛出异常即可
@@ -29,7 +31,11 @@ class UserHandler extends BaseHandler
         $data = $acl->getCurUser();
         // 这里进行数据结构封装，例如BaseHandler例如successJson()
         // 返回status通常都是0，表示成功，因为不合法的会以抛出异常的方法返回。保留status可用于不同业务需求
-        $this->successJson($data);
+        sleep(2);
+        $this->successJson([
+            'userInfo' => $data,
+            'menu' => $di->getShared('config')->menu->toArray()
+        ]);
     }
 
     public function listAction($params = array())
