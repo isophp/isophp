@@ -1,7 +1,17 @@
 ## Overview
 ISOPHP社区网站正在建设中，欢迎提交PR，共同建设社区。
 
-### Quick Start
+## Prerequisites
+
+```
+# Install PHP,Nodejs,Nginx,Mysql
+# Install composer
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+php composer-setup.php
+```
+
+## Quick Start
 ```
 git clone https://github.com/isophp/isophp.git
 cd isophp && composer install
@@ -10,39 +20,7 @@ npm start
 # optional
 echo '127.0.0.1 devel.isophp.cn' |sudo tee -a /etc/hosts
 ```
-##### nginx参考配置
-```nginx
-server {
-    listen      80;
-    server_name devel.isophp.cn;
-    root       /ISOPHP/PROJECT/PATH/public; 
-    index       index.php index.html index.htm;
-    charset     utf-8;
-    access_log /NGINX/LOG/PATH/isophp.log accesslog;
 
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-
-    location ~ \.php$ {
-        try_files     $uri =404;
-
-        fastcgi_pass  127.0.0.1:9000;
-        fastcgi_index /index.php;
-
-        include fastcgi_params;
-        fastcgi_split_path_info       ^(.+\.php)(/.+)$;
-        fastcgi_param PATH_INFO       $fastcgi_path_info;
-        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-    }
-
-    location ~ /\.ht {
-        deny all;
-    }
-}
-
-```
 ### 推荐开发环境
 - PHP v7.2 or later
 - Mysql v5.7 or later
@@ -147,3 +125,37 @@ TODO
 ##### log
 1. 对异常进行了捕获，错误会输出到Logs/System-date('Y-m-d').log
 2. 业务开发中如果需要记录日志可以使用 Log::getLogger('日志名')->日志类型(msg)
+
+#### nginx参考配置
+```nginx
+server {
+    listen      80;
+    server_name devel.isophp.cn;
+    root       /ISOPHP/PROJECT/PATH/public; 
+    index       index.php index.html index.htm;
+    charset     utf-8;
+    access_log /NGINX/LOG/PATH/isophp.log accesslog;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        try_files     $uri =404;
+
+        fastcgi_pass  127.0.0.1:9000;
+        fastcgi_index /index.php;
+
+        include fastcgi_params;
+        fastcgi_split_path_info       ^(.+\.php)(/.+)$;
+        fastcgi_param PATH_INFO       $fastcgi_path_info;
+        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+
+```
