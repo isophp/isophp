@@ -17,7 +17,7 @@ window.app = app;
 app.use(createLoading());
 
 // 3. Register global model
-app.model(require('./Apps/Sys/Models/Global').default);
+app.model(require('./Apps/Sys/Handlers/Global').default);
 
 // 4. Router
 app.router(require('./router').default);

@@ -64,6 +64,38 @@ string $author, int $status, array $extra = array(), string $intro = '')
         return [true, $article->id];
     }
 
+    public function save(string $id, string $title, string $content, int $categoryId,
+                        string $author, int $status, array $extra = array(), string $intro = '')
+    {
+        $id = $this->decodeArticleId($id);
+        if (empty($id)) {
+            return [false, 'id为空或不合法'];
+        }
+        $info = [
+            'title' => $title,
+            'content' => $content,
+            'category_id' => $categoryId,
+            'author' => $author,
+            'status' => $status,
+            'extra' => json_encode($extra, true),
+            'intro' => $intro,
+        ];
+        $article = Content::findFirst([
+            'id = ?0',
+            'bind' => [
+                $id
+            ]
+        ]);
+        foreach ($info as $key => $value) {
+            $article->$key = $value;
+        }
+        if (!$article->save()) {
+            Log::getLogger()->info($article->getMessages());
+            return [false, $article->getMessages()];
+        }
+        return [true, $article->id];
+    }
+
     public function getArticle($id)
     {
         $id = $this->decodeArticleId($id);
