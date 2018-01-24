@@ -43,7 +43,6 @@ return new \Phalcon\Config([
             'path' => '/user',
             'name' => '用户',
             'icon' => 'user',
-            'app' => 'User',
             'pages' => [
                 [
                     'app' => 'User',
@@ -51,6 +50,7 @@ return new \Phalcon\Config([
                     'page' => 'UserManager',
                     'name' => '用户管理',
                     'handlers' => ['User'],
+                    'icon' => 'team'
                 ]
             ]
         ],
@@ -58,14 +58,47 @@ return new \Phalcon\Config([
             'layout' => 'BasicLayout',
             'path' => '/sys',
             'name' => '系统',
-            'app' => 'User',
+            'icon' => 'dashboard',
             'pages' => [
                 [
                     'app' => 'User',
                     'path' => '/sys/index',
                     'page' => 'UserManager',
                     'name' => '系统状态',
-                    'handlers' => ['User']
+                    'handlers' => ['User'],
+                    'icon' => 'profile'
+                ]
+            ]
+        ],
+        [
+            'layout' => 'BasicLayout',
+            'path' => '/article',
+            'name' => '文章',
+            'icon' => 'book',
+            'pages' => [
+                [
+                    'app' => 'Article',
+                    'path' => '/article/category',
+                    'page' => 'CategoryManager',
+                    'name' => '栏目管理',
+                    'handlers' => ['Category'],
+                    'icon' => 'folder-add',
+                ],
+                [
+                    'app' => 'Article',
+                    'path' => '/article/add',
+                    'page' => 'AddArticle',
+                    'name' => '发表文章',
+                    'handlers' => ['Article','Category'],
+                    'icon' => 'edit',
+                ],
+                [
+                    'app' => 'Article',
+                    'path' => '/article/manage',
+                    'page' => 'ArticleManager',
+                    'name' => '文章管理',
+                    'handlers' => ['Article'],
+                    'icon' => 'file-add'
                 ]
             ]
         ]

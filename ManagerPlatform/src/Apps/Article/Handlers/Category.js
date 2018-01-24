@@ -1,18 +1,19 @@
-import {adminApiGate} from '../../services/api';
+/**
+ * Created by liushuai on 2018/1/13.
+ */
+import {adminApiGate} from '../../../services/api';
 // todo 如何简化
 const defaultParams = {
-    module: 'User',
-    handler: 'User',
+    module: 'Article',
+    handler: 'Category',
 };
 export default {
-    namespace: 'User',
+    namespace: 'Category',
     state: {
         data: {
             list: [],
-            pagination: {},
         },
         loading: false,
-        currentUser: {},
     },
 
     effects: {
@@ -35,18 +36,7 @@ export default {
                 payload: false,
             });
         },
-        * getCurUser(_, {call, put}) {
-            const response = yield call(adminApiGate, {
-                ...defaultParams,
-                method: 'getCurUser',
-            });
-            yield put({
-                type: 'saveCurrentUser',
-                payload: response.data,
-            });
-        },
     },
-
     reducers: {
         save(state, action) {
             return {
@@ -59,21 +49,6 @@ export default {
                 ...state,
                 loading: action.payload,
             };
-        },
-        saveCurrentUser(state, action) {
-            return {
-                ...state,
-                currentUser: action.payload,
-            };
-        },
-        changeNotifyCount(state, action) {
-            return {
-                ...state,
-                currentUser: {
-                    ...state.currentUser,
-                    notifyCount: action.payload,
-                },
-            };
-        },
+        }
     },
 };
