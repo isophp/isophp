@@ -24,7 +24,6 @@ export default {
                 ...defaultParams,
                 method: 'getCurUser',
             });
-            console.log(response);
             yield put({
                 type: 'saveCurrentUser',
                 payload: response.data,

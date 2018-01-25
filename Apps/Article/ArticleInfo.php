@@ -107,4 +107,52 @@ string $author, int $status, array $extra = array(), string $intro = '')
         ]);
         return $info;
     }
+
+    public function deleteArticle($id)
+    {
+        $article = Content::findFirst([
+            "id='$id'"
+        ]);
+        if (!$article->delete()) {
+            return [false, $article->getMessages()];
+        }
+        return [true, $id];
+    }
+
+    public function getArticleList($page, $pageSize, $categoryId = 0, $keyword = '')
+    {
+        $query = Content::query();
+        // todo 这里添加父类分类的查询
+        if ($categoryId) {
+            $query->andWhere('category_id=0?', [
+                $categoryId
+            ]);
+        }
+        if (!empty($keyword)) {
+            $query->andWhere('title like 0?', [
+                '%' . $keyword . '%'
+            ]);
+        }
+        $query->limit($pageSize, ($page - 1) * $pageSize);
+        return $query->execute()->toArray();
+    }
+
+    public function articleNumber($categoryId = 0, $keyword = '')
+    {
+        $query = Content::query()
+            ->columns('count(*) as num');
+        // todo 这里添加父类分类的查询
+        if ($categoryId) {
+            $query->andWhere('category_id=0?', [
+                $categoryId
+            ]);
+        }
+        if (!empty($keyword)) {
+            $query->andWhere('title like 0?', [
+                '%' . $keyword . '%'
+            ]);
+        }
+        $result = $query->execute()->toArray();
+        return intval($result[0]['num']);
+    }
 }
