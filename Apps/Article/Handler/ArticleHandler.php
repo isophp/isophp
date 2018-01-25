@@ -33,6 +33,22 @@ class ArticleHandler extends BaseHandler
         }
     }
 
+    public function deleteAction($params)
+    {
+        $id = $params['id'] ?? 0;
+        $id = intval($id);
+        if (empty($id) || !is_int($id)) {
+            throw new ApiParamErrorException('参数丢失或错误');
+        }
+        $articleInfo = new ArticleInfo();
+        list($status, $message) = $articleInfo->deleteArticle($id);
+        if ($status) {
+            $this->successJson(['message' => 'success', 'id' => $id]);
+        } else {
+            throw new ApiParamErrorException($message);
+        }
+    }
+
     public function updateAction($params)
     {
         sleep(5);
@@ -54,5 +70,25 @@ class ArticleHandler extends BaseHandler
         } else {
             throw new ApiParamErrorException($message);
         }
+    }
+
+    public function listAction($params)
+    {
+        $keyword = $params['keyword'] ?? '';
+        $currentPage = $params['currentPage'] ?? 1;
+        $pageSize = $params['pageSize'] ?? 10;
+        $categoryId = $params['categoryId'] ?? '';
+        $article = new ArticleInfo();
+        $list = $article->getArticleList($currentPage, $pageSize, $categoryId, $keyword);
+        $total = $article->articleNumber($categoryId, $keyword);
+        $data = [
+            'list' => $list,
+            'pagination' => [
+                'current' => intval($currentPage),
+                'pageSize' => intval($pageSize),
+                'total' => $total,
+            ]
+        ];
+        $this->successJson($data);
     }
 }

@@ -1,4 +1,4 @@
-import React,{Component, createElement} from 'react';
+import React,{Component, createElement, Fragment} from 'react';
 import { Route } from 'dva/router';
 import {connect} from 'dva';
 import {Spin} from 'antd';
@@ -87,9 +87,7 @@ class AuthorizeRouteComponent extends Component{
             }
             const menuData = formatMenuData([...menu]);
             const routerData = {};
-            console.log(menu);
             generateRouteData(menu, routerData);
-            console.log(menu);
             routerDataCache = routerData;
 
             const render = [];
@@ -111,9 +109,9 @@ class AuthorizeRouteComponent extends Component{
                 );
             });
             return (
-                <div>
+                <Fragment>
                     {render}
-                </div>
+                </Fragment>
             )
         } else {
             return null;

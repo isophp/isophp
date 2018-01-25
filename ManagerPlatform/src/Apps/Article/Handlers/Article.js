@@ -12,6 +12,11 @@ export default {
     state: {
         id: 0,
         loading: false,
+        listLoading: false,
+        data: {
+            list: [],
+            pagination: {},
+        },
     },
     effects: {
         * add({ payload,success}, {select, call, put}) {
@@ -41,6 +46,35 @@ export default {
                 success();
             }
         },
+        * list({payload, success}, {call, put}) {
+            yield put({
+                type: 'save',
+                payload: {
+                    listLoading: true
+                },
+            });
+            const response = yield call(adminApiGate, {
+                ...defaultParams,
+                method: 'list',
+                payload: payload
+            });
+            if (!response) {
+                return;
+            }
+            yield put({
+                type: 'save',
+                payload: {
+                    data: response.data
+                },
+            });
+            yield put({
+                type: 'save',
+                payload: {
+                    listLoading: false
+                },
+            });
+
+        },
         * update({ payload,success}, {select, call, put}) {
             yield put({
                 type: 'changeLoading',
@@ -49,6 +83,31 @@ export default {
             const response = yield call(adminApiGate, {
                 ...defaultParams,
                 method: 'update',
+                payload: payload
+            });
+            if (!response) {
+                return;
+            }
+            yield put({
+                type: 'save',
+                payload: response.data,
+            });
+            yield put({
+                type: 'changeLoading',
+                payload: false,
+            });
+            if (success && typeof success === 'function') {
+                success();
+            }
+        },
+        * delete({payload, success}, {call, put}){
+            yield put({
+                type: 'changeLoading',
+                payload: true,
+            });
+            const response = yield call(adminApiGate, {
+                ...defaultParams,
+                method: 'delete',
                 payload: payload
             });
             if (!response) {

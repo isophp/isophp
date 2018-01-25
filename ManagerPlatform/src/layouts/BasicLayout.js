@@ -140,18 +140,16 @@ class BasicLayout extends React.PureComponent {
                 {
                   getRoutes(match.path, routerData).map(item =>
                     (
-                      <AuthorizedRoute
+                    <Route
                         key={item.key}
                         path={item.path}
                         component={item.component}
-                        exact={item.exact}
-                        authority={item.authority}
                         redirectPath="/exception/403"
-                      />
+                    />
                     )
                   )
                 }
-                <Redirect exact from="/" to="/user/UserManager" />
+                <Redirect exact from="/" to="/sysInfo" />
                 <Route render={NotFound} />
               </Switch>
             </div>
