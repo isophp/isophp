@@ -10,7 +10,7 @@ use Phalcon\Di;
 use TopCms\Apps\User\Acl;
 use TopCms\Apps\User\UserInfo;
 use TopCms\Framework\Exceptions\ApiParamErrorException;
-use TopCms\Framework\Handler\BaseHandler;
+use TopCms\Framework\Mvc\Handler\BaseHandler;
 
 /**
  * Class UserHandler

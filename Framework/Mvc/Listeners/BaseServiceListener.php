@@ -6,7 +6,7 @@
  * Time: 13:22
  * Email: ln6265431@163.com
  */
-namespace TopCms\Framework\Listeners;
+namespace TopCms\Framework\Mvc\Listeners;
 use TopCms\Framework\Exceptions\ExceptionHandler;
 use TopCms\Framework\Exceptions\SysException;
 use Phalcon\Application;

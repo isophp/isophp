@@ -9,7 +9,7 @@
 namespace TopCms\Modules\Article\Controllers;
 
 use TopCms\Apps\Article\ArticleInfo;
-use TopCms\Framework\Controller\BaseController;
+use TopCms\Framework\Mvc\Controller\BaseController;
 
 class IndexController extends BaseController
 {

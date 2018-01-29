@@ -6,10 +6,10 @@
  * Time: 11:52
  * Email: ln6265431@163.com
  */
-namespace TopCms\Framework\Applications;
+namespace TopCms\Framework\Mvc\Applications;
 
 use Phalcon\Cli\Console;
-use TopCms\Framework\Listeners\BaseServiceListener;
+use TopCms\Framework\Mvc\Listeners\BaseServiceListener;
 use Phalcon\Di\FactoryDefault\Cli;
 use Phalcon\DiInterface;
 use Phalcon\Events\Manager;

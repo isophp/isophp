@@ -8,8 +8,7 @@
  */
 namespace Tests;
 
-use TopCms\Framework\Applications\HttpApplication;
-use Phalcon\Di;
+use TopCms\Framework\Mvc\Applications\HttpApplication;
 use Phalcon\Http\Response;
 use Phalcon\Test\UnitTestCase as PhalconTestCase;
 
@@ -30,7 +29,7 @@ abstract class UnitTestCase extends PhalconTestCase
     public function setUp()
     {
         $di = new \Phalcon\Di();
-        $application = new \TopCms\Framework\Applications\HttpApplication($di);
+        $application = new HttpApplication($di);
         $this->application = $application;
         $this->setDI($di);
     }

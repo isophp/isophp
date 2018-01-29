@@ -11,7 +11,7 @@ namespace TopCms\Modules\Sys\Controllers;
 use TopCms\Apps\User\Acl;
 use TopCms\Framework\Exceptions\ApiParamErrorException;
 use TopCms\Framework\Exceptions\ApiUnauthorizedException;
-use TopCms\Framework\Handler\HandlerFactory;
+use TopCms\Framework\Mvc\Handler\HandlerFactory;
 use Phalcon\Mvc\Controller;
 
 class ApiHandlerController extends Controller

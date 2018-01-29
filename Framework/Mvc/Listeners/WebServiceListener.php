@@ -6,7 +6,7 @@
  * Time: 13:22
  * Email: ln6265431@163.com
  */
-namespace TopCms\Framework\Listeners;
+namespace TopCms\Framework\Mvc\Listeners;
 
 use Phalcon\Mvc\Application;
 use Phalcon\DiInterface;

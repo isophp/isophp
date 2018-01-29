@@ -12,7 +12,6 @@ class TestTask extends Task
 {
     public function encodeAction($params)
     {
-        var_dump($ret->toArray());exit;
         $articleInfo = new \TopCms\Apps\Article\ArticleInfo();
         var_dump($articleInfo->encodeArticleId($params[0]));
     }

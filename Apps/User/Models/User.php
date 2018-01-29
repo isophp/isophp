@@ -7,12 +7,12 @@
 
 namespace TopCms\Apps\User\Models;
 
-use Phalcon\Mvc\Model;
+use TopCms\Framework\Mvc\Model\BaseModel;
 
 /**
  * Class Auth
  */
-class User extends Model
+class User extends BaseModel
 {
 
     public function initialize()

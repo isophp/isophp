@@ -5,6 +5,6 @@ ini_set('date.timezone','Asia/Shanghai');
 
 require_once '../Framework/bootstrap.php';
 
-$application = new \TopCms\Framework\Applications\HttpApplication();
+$application = new \TopCms\Framework\Mvc\Applications\HttpApplication();
 echo $application->handle()->getContent();
 exit;

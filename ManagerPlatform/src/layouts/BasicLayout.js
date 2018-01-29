@@ -49,7 +49,7 @@ class BasicLayout extends React.PureComponent {
   static childContextTypes = {
     location: PropTypes.object,
     breadcrumbNameMap: PropTypes.object,
-  }
+  };
   state = {
     isMobile,
   };
@@ -59,14 +59,14 @@ class BasicLayout extends React.PureComponent {
       location,
       breadcrumbNameMap: routerData,
     };
-  }
+  };
   componentDidMount() {
     enquireScreen((mobile) => {
       this.setState({
         isMobile: mobile,
       });
     });
-  }
+  };
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
@@ -81,21 +81,21 @@ class BasicLayout extends React.PureComponent {
       type: 'Global/changeLayoutCollapsed',
       payload: collapsed,
     });
-  }
+  };
   handleNoticeClear = (type) => {
     message.success(`清空了${type}`);
     this.props.dispatch({
       type: 'Global/clearNotices',
       payload: type,
     });
-  }
+  };
   handleMenuClick = ({ key }) => {
     if (key === 'logout') {
       this.props.dispatch({
         type: 'login/logout',
       });
     }
-  }
+  };
   handleNoticeVisibleChange = (visible) => {
     if (visible) {
       this.props.dispatch({
@@ -119,7 +119,6 @@ class BasicLayout extends React.PureComponent {
           collapsed={collapsed}
           location={location}
           isMobile={this.state.isMobile}
-          onCollapse={this.handleMenuCollapse}
         />
         <Layout>
           <GlobalHeader
@@ -149,7 +148,6 @@ class BasicLayout extends React.PureComponent {
                     )
                   )
                 }
-                <Redirect exact from="/" to="/sysInfo" />
                 <Route render={NotFound} />
               </Switch>
             </div>

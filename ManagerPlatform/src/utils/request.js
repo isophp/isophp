@@ -6,7 +6,7 @@ const codeMessage = {
   201: '新建或修改数据成功。',
   202: '一个请求已经进入后台排队（异步任务）',
   204: '删除数据成功。',
-  400: '发出的请求有错误，服务器没有进行新建或修改数据,的操作。',
+  400: '发出的请求有错误，参数有错误。',
   401: '用户没有权限（令牌、用户名、密码错误）。',
   403: '用户得到授权，但是访问是被禁止的。',
   404: '发出的请求针对的是不存在的记录，服务器没有进行操作',
@@ -57,7 +57,7 @@ export default function request(url, options) {
       if (newOptions.method === 'DELETE' || response.status === 204) {
         return response.text();
       }
-      if (response.status === 500) {
+      if (response.status >= 400 && response.status <= 500) {
         return null;
       }
       return response.json();

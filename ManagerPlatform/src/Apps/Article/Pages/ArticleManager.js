@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Card, Form, Input, Select, Icon, Button, Dropdown, Menu, InputNumber, DatePicker, Modal, message } from 'antd';
 import ArticleManagerTable from '../Components/ArticleManagerTable';
@@ -13,7 +13,7 @@ const { Option } = Select;
     Article: state.Article
 }))
 @Form.create()
-export default class Article extends Component {
+export default class ArticleManager extends PureComponent {
     state = {
         addInputValue: '',
         modalVisible: false,

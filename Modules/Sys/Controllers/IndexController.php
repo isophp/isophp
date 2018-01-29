@@ -6,7 +6,7 @@
  */
 namespace TopCms\Modules\Sys\Controllers;
 
-use TopCms\Framework\Controller\BaseController;
+use TopCms\Framework\Mvc\Controller\BaseController;
 use TopCms\Framework\Exceptions\ApiUnauthorizedException;
 
 /**

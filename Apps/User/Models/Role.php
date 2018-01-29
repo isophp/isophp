@@ -9,10 +9,9 @@
 
 namespace TopCms\Apps\User\Models;
 
+use TopCms\Framework\Mvc\Model\BaseModel;
 
-use Phalcon\Mvc\Model;
-
-class Role extends Model
+class Role extends BaseModel
 {
 
 }

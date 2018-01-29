@@ -8,7 +8,7 @@
  */
 namespace TopCms\Modules\User\Controllers;
 
-use TopCms\Framework\Controller\BaseController;
+use TopCms\Framework\Mvc\Controller\BaseController;
 use TopCms\Framework\Exceptions\ApiParamErrorException;
 
 class IndexController extends BaseController

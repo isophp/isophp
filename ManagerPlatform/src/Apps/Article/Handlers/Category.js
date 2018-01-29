@@ -10,13 +10,38 @@ const defaultParams = {
 export default {
     namespace: 'Category',
     state: {
+        tree: [],
         data: {
             list: [],
+            pagination: {}
         },
-        loading: false,
+        listLoading: false,
+        addLoading: false
     },
 
     effects: {
+        * add({payload, success}, {call, put}){
+            yield put({
+                type: 'save',
+                payload: {
+                    addLoading: true,
+                },
+            });
+            const response = yield call(adminApiGate, {
+                ...defaultParams,
+                method: 'add',
+                payload: payload
+            });
+            yield put({
+                type: 'save',
+                payload: {
+                    addLoading: false
+                },
+            });
+            if (response && success && typeof success === 'function') {
+                success();
+            }
+        },
         * list({ payload, callback }, {select, call, put}) {
             yield put({
                 type: 'changeLoading',
@@ -36,12 +61,33 @@ export default {
                 payload: false,
             });
         },
+        * tree({ payload, callback }, {select, call, put}) {
+            yield put({
+                type: 'changeLoading',
+                payload: true,
+            });
+            const response = yield call(adminApiGate, {
+                ...defaultParams,
+                method: 'tree',
+                payload: payload
+            });
+            yield put({
+                type: 'save',
+                payload: {
+                    tree: response.data.tree
+                }
+            });
+            yield put({
+                type: 'changeLoading',
+                payload: false,
+            });
+        },
     },
     reducers: {
         save(state, action) {
             return {
                 ...state,
-                data: action.payload,
+                ...action.payload,
             };
         },
         changeLoading(state, action) {
