@@ -5,16 +5,17 @@
  * @date: 2018/1/13下午9:22
  */
 namespace TopCms\Apps\Article\Models;
-use Phalcon\Mvc\Model;
+
 use Phalcon\Validation;
 use Phalcon\Validation\Validator\InclusionIn;
 use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\StringLength;
+use TopCms\Framework\Mvc\Model\BaseModel;
 
 /**
  * Class Article
  */
-class Content extends Model
+class Content extends BaseModel
 {
     public $id;
     public $title;
@@ -32,45 +33,45 @@ class Content extends Model
 
     public function validation()
     {
-//        $validator = new Validation();
-//        $validator->add(['title', 'content'], new StringLength([
-//            'max' => [
-//                'title' => 250,
-//                'content' => 6500,
-//            ],
-//            'min' => [
-//                'title' => 5,
-//                'content' => 1,
-//            ],
-//            'messageMaximum' => [
-//                'title' => '标题过长',
-//                'content' => '内容过长'
-//            ],
-//            'messageMinimum' => [
-//                'title' => '标题过短',
-//                'content' => '内容不能为空'
-//            ],
-//        ]));
-//        $validator->add([
-//            'title',
-//            'content',
-//            'category_id',
-//            'author',
-//            'status',
-//        ],new PresenceOf([
-//            'message' => [
-//                'title' => '标题字段缺失',
-//                'content' => '文章内容字段缺失',
-//                'category_id' => '栏目字段缺失',
-//                'author' => '用户字段缺失',
-//                'status' => '状态字段缺失'
-//            ]
-//        ]));
-//
-//        $validator->add([], new InclusionIn([
-//            'message' => '状态字段不可取',
-//            'domain' => [0,1,2,3],
-//        ]));
+        $validator = new Validation();
+        $validator->add(['title', 'content'], new StringLength([
+            'max' => [
+                'title' => 250,
+                'content' => 6500,
+            ],
+            'min' => [
+                'title' => 5,
+                'content' => 1,
+            ],
+            'messageMaximum' => [
+                'title' => '标题过长',
+                'content' => '内容过长'
+            ],
+            'messageMinimum' => [
+                'title' => '标题过短',
+                'content' => '内容不能为空'
+            ],
+        ]));
+        $validator->add([
+            'title',
+            'content',
+            'category_id',
+            'author',
+            'status',
+        ],new PresenceOf([
+            'message' => [
+                'title' => '标题字段缺失',
+                'content' => '文章内容字段缺失',
+                'category_id' => '栏目字段缺失',
+                'author' => '用户字段缺失',
+                'status' => '状态字段缺失'
+            ]
+        ]));
+
+        $validator->add(['status'], new InclusionIn([
+            'message' => '状态字段不可取',
+            'domain' => [0,1,2,3],
+        ]));
     }
 
     public function initialize()

@@ -67,7 +67,7 @@ const generateRouteData = (menu,routeData) => {
 };
 
 @connect((state) => ({
-    Global: state.Global
+    Login: state.Login
 }))
 class AuthorizeRouteComponent extends Component{
     state = {
@@ -76,11 +76,11 @@ class AuthorizeRouteComponent extends Component{
         super(props);
         const {dispatch} = this.props;
         dispatch({
-            type: 'Global/getCurUser'
+            type: 'Login/getCurUser'
         });
     };
     render(){
-        const {Global:{currentUser:{userInfo, menu}}} = this.props;
+        const {Login:{currentUser:{userInfo, menu}}} = this.props;
         if (true) {
             if (!userInfo) {
                 return <Spin size="large" className={styles.globalSpin} />;

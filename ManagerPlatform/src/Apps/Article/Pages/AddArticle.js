@@ -34,7 +34,7 @@ export default class AddArticle extends PureComponent {
     componentDidMount() {
         const {dispatch} = this.props;
         dispatch({
-            type: 'Category/list',
+            type: 'Category/tree',
         });
     };
 
@@ -120,8 +120,8 @@ export default class AddArticle extends PureComponent {
         const {getFieldDecorator, getFieldValue, onSubmit} = this.props.form;
         const {Article:{loading: articleLoading}} = this.props;
         const _this = this;
-        const {Category: {data: {list: categoryList}}} = this.props;
-        const options = this.generateCategoryOptions(categoryList);
+        const {Category: {tree}} = this.props;
+        const options = this.generateCategoryOptions(tree);
         return <PageHeaderLayout>
             <Spin spinning={articleLoading}>
             <div className={Style.content}>

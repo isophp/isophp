@@ -76,9 +76,15 @@ class ExceptionHandler
     protected function handleDevelopmentException($di, $e)
     {
         $whoops = new Run();
+        $response = $di->getResponse();
         if ($e instanceof ApiParamErrorException){
-            $whoops->pushHandler(new JsonResponseHandler());
-            return  $whoops->handleException($e);
+            $response->setStatusCode($e->getHttpCode());
+            $response->setContent(json_encode([
+                'status' => $e->getHttpCode(),
+                'msg' => $e->getMessage(),
+            ]));
+            $response->setContentType('application/json');
+            $response->send();
         }else{
             //否则返回html数据
             $whoops->pushHandler(new PrettyPageHandler());

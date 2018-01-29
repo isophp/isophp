@@ -4,8 +4,7 @@
  * @author ln6265431@163.com
  * @date: 2018/1/7下午7:03
  */
-namespace TopCms\Framework\Handler;
-use TopCms\Framework\Exceptions\ApiException;
+namespace TopCms\Framework\Mvc\Handler;
 use TopCms\Framework\Exceptions\ApiNotFoundException;
 
 /**

@@ -7,7 +7,7 @@
 namespace TopCms\Apps\Article\Handler;
 use TopCms\Apps\Article\ArticleInfo;
 use TopCms\Framework\Exceptions\ApiParamErrorException;
-use TopCms\Framework\Handler\BaseHandler;
+use TopCms\Framework\Mvc\Handler\BaseHandler;
 
 /**
  * Class ArticleHandler
