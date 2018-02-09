@@ -21,7 +21,9 @@ create table if not exists `app_article_category`(
   `id` int not null auto_increment comment '自增id',
   `name` varchar(128) not null comment '栏目名称',
   `parent_id` int not null default 0 comment '父节点id',
+  `del` int not null default 0 comment '标识栏目是否为删除状态',
   `updated_at` datetime null default null on update current_timestamp comment '更新时间',
   `created_at` datetime not null default current_timestamp comment '创建时间',
-  primary key (`id`)
+  primary key (`id`),
+  unique key name(`name`) comment '栏目唯一key'
 )engine=InnoDb default charset=utf8;

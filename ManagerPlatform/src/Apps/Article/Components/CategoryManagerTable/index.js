@@ -1,6 +1,7 @@
 import React, {PureComponent, Fragment} from 'react';
 import {Table, Alert, Badge, Divider} from 'antd';
 import styles from './index.less';
+import EditableCell from '../../../../components/EditableCell';
 
 class CategoryManagerTable extends PureComponent {
     state = {
@@ -37,9 +38,18 @@ class CategoryManagerTable extends PureComponent {
     cleanSelectedKeys = () => {
         this.handleRowSelectChange([], []);
     };
-    handleTableDelete = (e) => {
+    handleTableDelete = (id, status, e) => {
         e.preventDefault();
-        this.props.onDelete(e.target.dataset.id);
+        this.props.onDelete(id, status);
+    };
+    onCellChange = (id, field) => {
+        const {updateCategory} = this.props;
+        return (text, success, fail) => {
+            const payload = {};
+            payload.id = id;
+            payload[field] = text;
+            return updateCategory(payload, success, fail);
+        }
     };
     render() {
         const {selectedRowKeys, totalCallNo} = this.state;
@@ -51,45 +61,50 @@ class CategoryManagerTable extends PureComponent {
                 dataIndex: 'id',
             },
             {
-                title: '标题',
-                dataIndex: 'title',
-            },
-            {
-                title: '栏目',
-                dataIndex: 'category_id'
-            },
-            {
-                title: '作者',
-                dataIndex: 'author',
-            }, {
-                title: '评论数',
-                dataIndex: 'comments_num',
-            },
-            {
-                title: '点击数',
-                dataIndex: 'hits_num'
-            },
-            {
-                title: '置顶',
-                dataIndex: 'ontop'
+                title: '栏目名',
+                dataIndex: 'name',
+                width: 150,
+                render: (text, record) => (
+                    <EditableCell
+                        value={text}
+                        onChange={this.onCellChange(record.id, 'name')}
+                    />
+                )
             },
             {
                 title: '状态',
-                dataIndex: 'status',
+                dataIndex: 'del',
+                render: (text) => {
+                    if (text == 1) {
+                        return '删除';
+                    } else {
+                        return '在线';
+                    }
+                }
+            },
+            {
+                title: '父栏目id',
+                dataIndex: 'parent_id'
             },
             {
                 title: '创建时间',
-                dataIndex: 'created_at'
+                dataIndex: 'created_at',
             },
             {
                 title: '操作',
-                render: (text, record) => (
-                    <Fragment>
-                        <a href="" data-id={record.id} onClick={this.handleTableDelete}>删除</a>
+                render: (text, record) => {
+                    let changeStatus = '';
+                    if (record.del == 0) {
+                        changeStatus = <a href="" onClick={(e) => this.handleTableDelete(record.id, 1, e)}>删除</a>
+                    } else {
+                        changeStatus = <a href="" onClick={(e) => this.handleTableDelete(record.id, 0, e)}>取消删除</a>;
+                    }
+                    return <Fragment>
+                        {changeStatus}
                         <Divider type="vertical"/>
                         <a href="">编辑</a>
                     </Fragment>
-                ),
+                }
             }
         ];
 

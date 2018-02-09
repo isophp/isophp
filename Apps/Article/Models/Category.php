@@ -21,6 +21,7 @@ class Category extends BaseModel
     public $id;
     public $parent_id;
     public $name;
+    public $del;
     public $updated_at;
     public $created_at;
     public function initialize()

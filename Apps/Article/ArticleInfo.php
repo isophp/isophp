@@ -10,11 +10,18 @@ use Phalcon\Di;
 use TopCms\Apps\Article\Models\Content;
 use TopCms\Framework\Log\Log;
 
+// todo 文章发布时，查看栏目状态是否删除！！！
+
 /**
  * Class ArticleInfo
  */
 class ArticleInfo
 {
+    const ARTICLE_STATUS_DRAFT = 0; // 草稿
+    const ARTICLE_STATUS_CHECK = 1; // 审核中
+    const ARTICLE_STATUS_PUBLISH = 2; // 发布
+    const ARTICLE_STATUS_DELETE = 3; // 删除
+
     public function getArticleConfig()
     {
         $di = Di\FactoryDefault\Cli::getDefault();
@@ -137,18 +144,21 @@ string $author, int $status, array $extra = array(), string $intro = '')
         return $query->execute()->toArray();
     }
 
-    public function articleNumber($categoryId = 0, $keyword = '')
+    public function articleNumber($categoryId = 0, $keyword = '', $status = null)
     {
         $query = Content::query()
             ->columns('count(*) as num');
         // todo 这里添加父类分类的查询
         if ($categoryId) {
-            $query->andWhere('category_id=0?', [
+            $query->andWhere('category_id=?0', [
                 $categoryId
             ]);
         }
+        if ($status !== null) {
+            $query->andWhere('status=?0', [$status]);
+        }
         if (!empty($keyword)) {
-            $query->andWhere('title like 0?', [
+            $query->andWhere('title like ?0', [
                 '%' . $keyword . '%'
             ]);
         }

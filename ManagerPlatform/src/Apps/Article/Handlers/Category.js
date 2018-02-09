@@ -16,7 +16,8 @@ export default {
             pagination: {}
         },
         listLoading: false,
-        addLoading: false
+        addLoading: false,
+        treeLoading: false,
     },
 
     effects: {
@@ -54,7 +55,9 @@ export default {
             });
             yield put({
                 type: 'save',
-                payload: response.data,
+                payload: {
+                    data: response.data
+                },
             });
             yield put({
                 type: 'changeLoading',
@@ -63,8 +66,10 @@ export default {
         },
         * tree({ payload, callback }, {select, call, put}) {
             yield put({
-                type: 'changeLoading',
-                payload: true,
+                type: 'save',
+                payload: {
+                    treeLoading: true
+                },
             });
             const response = yield call(adminApiGate, {
                 ...defaultParams,
@@ -78,9 +83,82 @@ export default {
                 }
             });
             yield put({
+                type: 'save',
+                payload: {
+                    treeLoading: false
+                },
+            });
+        },
+        * delete({payload, success, fail}, {call, put}){
+            yield put({
+                type: 'changeLoading',
+                payload: true,
+            });
+            const response = yield call(adminApiGate, {
+                ...defaultParams,
+                method: 'delete',
+                payload: payload
+            });
+            if (!response) {
+                return;
+            }
+            if (response.status == -1) {
+                fail(response.data.msg);
+                return;
+            }
+            yield put({
                 type: 'changeLoading',
                 payload: false,
             });
+            if (success && typeof success === 'function') {
+                success();
+            }
+        },
+        * cancelDelete({payload, success, fail}, {call, put}){
+            yield put({
+                type: 'changeLoading',
+                payload: true,
+            });
+            const response = yield call(adminApiGate, {
+                ...defaultParams,
+                method: 'cancelDelete',
+                payload: payload
+            });
+            if (!response) {
+                return;
+            }
+            yield put({
+                type: 'changeLoading',
+                payload: false,
+            });
+            if (success && typeof success === 'function') {
+                success();
+            }
+        },
+        * update({payload, success, fail}, {call, put}){
+            yield put({
+                type: 'changeLoading',
+                payload: true,
+            });
+            const response = yield call(adminApiGate, {
+                ...defaultParams,
+                method: 'update',
+                payload: payload
+            });
+            if (!response) {
+                return;
+            }
+
+            yield put({
+                type: 'changeLoading',
+                payload: false,
+            });
+            if (response.status == -1 && fail) {
+                fail(response.data.msg);
+                return;
+            } else if (success && typeof success === 'function') {
+                success();
+            }
         },
     },
     reducers: {
@@ -93,7 +171,7 @@ export default {
         changeLoading(state, action) {
             return {
                 ...state,
-                loading: action.payload,
+                listLoading: action.payload,
             };
         }
     },
