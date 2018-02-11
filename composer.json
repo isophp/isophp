@@ -1,9 +1,26 @@
 {
+    "name": "isophp/isophp",
+    "description": "isophp website",
+    "keywords": ["isophp website"],
+    "license": "MIT",
+    "type": "project",
     "require": {
-        "phpunit/phpunit": "^5.0",
+        "php": ">=7.2",
         "phalcon/incubator": "^3.2",
         "filp/whoops": "^2.1",
         "hashids/hashids": "^2.0",
-        "erusev/parsedown": "^1.6"
-    }
+        "erusev/parsedown": "^1.6",
+        "crazy-max/cws-crypto": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.0"
+    },
+
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+
+    "minimum-stability": "dev"
 }
