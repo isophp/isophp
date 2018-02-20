@@ -20,7 +20,7 @@ class FileLogger extends FileAdapter
 
     protected function pretreatMessage(&$message)
     {
-        if (is_array($message)) {
+        if (is_array($message) || is_object($message)) {
             $message = var_export($message, true);
         }
     }

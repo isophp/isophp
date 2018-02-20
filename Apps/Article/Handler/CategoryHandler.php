@@ -25,7 +25,13 @@ class CategoryHandler extends BaseHandler
         $pageSize = $params['pageSize'] ?? 10;
         $categoryInfo = new CategoryInfo();
         $list = $categoryInfo->getCategoryList($currentPage, $pageSize);
-        $this->successJson(['list' => $list]);
+        $this->successJson(['list' => $list,
+            'pagination' => [
+                'current' => intval($currentPage),
+                'pageSize' => intval($pageSize),
+                'total' => $categoryInfo->categoryNumber(),
+            ]
+        ]);
     }
 
     public function treeAction()
@@ -44,11 +50,41 @@ class CategoryHandler extends BaseHandler
         if ($status) {
             $this->successJson(['id' => $message]);
         } else {
-            throw new ApiParamErrorException($message);
+            $this->failJson(['msg' => $message]);
         }
     }
 
-    public function editAction($params)
+    public function deleteAction($params)
+    {
+        $id = $params['id'] ?? '';
+        if (empty($id) || !is_numeric($id)) {
+            throw new ApiParamErrorException('param id error');
+        }
+        $categoryInfo = new CategoryInfo();
+        list($statue, $message) = $categoryInfo->deleteCategory($id);
+        if ($statue) {
+            $this->successJson([]);
+        } else {
+            $this->failJson(['msg' => $message]);
+        }
+    }
+
+    public function cancelDeleteAction($params)
+    {
+        $id = $params['id'] ?? '';
+        if (empty($id) || !is_numeric($id)) {
+            throw new ApiParamErrorException('param id error');
+        }
+        $categoryInfo = new CategoryInfo();
+        list($statue, $message) = $categoryInfo->cancelDeleteCategory($id);
+        if ($statue) {
+            $this->successJson([]);
+        } else {
+            $this->failJson(['msg' => $message]);
+        }
+    }
+
+    public function updateAction($params)
     {
         $name = $params['name'] ?? '';
         $id = $params['id'] ?? 0;
@@ -56,11 +92,11 @@ class CategoryHandler extends BaseHandler
             throw new ApiParamErrorException('参数错误');
         }
         $categoryInfo = new CategoryInfo();
-        list($status, $message) = $categoryInfo->editorCategory($id, $name);
+        list($status, $message) = $categoryInfo->updateCategory($id, $name);
         if ($status) {
             $this->successJson(['id' => $message]);
         } else {
-            $this->failJson(['message' => $message]);
+            $this->failJson(['msg' => $message]);
         }
     }
 

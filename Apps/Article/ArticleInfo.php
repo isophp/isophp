@@ -5,16 +5,24 @@
  * @date: 2018/1/13下午9:15
  */
 namespace TopCms\Apps\Article;
+
 use Hashids\Hashids;
 use Phalcon\Di;
 use TopCms\Apps\Article\Models\Content;
 use TopCms\Framework\Log\Log;
+
+// todo 文章发布时，查看栏目状态是否删除！！！
 
 /**
  * Class ArticleInfo
  */
 class ArticleInfo
 {
+    const ARTICLE_STATUS_DRAFT = 0; // 草稿
+    const ARTICLE_STATUS_CHECK = 1; // 审核中
+    const ARTICLE_STATUS_PUBLISH = 2; // 发布
+    const ARTICLE_STATUS_DELETE = 3; // 删除
+
     public function getArticleConfig()
     {
         $di = Di\FactoryDefault\Cli::getDefault();
@@ -44,7 +52,7 @@ class ArticleInfo
 
 
     public function add(string $title, string $content, int $categoryId,
-string $author, int $status, array $extra = array(), string $intro = '')
+                        string $author, int $status, array $extra = array(), string $intro = '')
     {
         $info = [
             'title' => $title,
@@ -65,7 +73,7 @@ string $author, int $status, array $extra = array(), string $intro = '')
     }
 
     public function save(string $id, string $title, string $content, int $categoryId,
-                        string $author, int $status, array $extra = array(), string $intro = '')
+                         string $author, int $status, array $extra = array(), string $intro = '')
     {
         $id = $this->decodeArticleId($id);
         if (empty($id)) {
@@ -96,7 +104,7 @@ string $author, int $status, array $extra = array(), string $intro = '')
         return [true, $article->id];
     }
 
-    public function getArticle($id)
+    public function getArticle(int $id)
     {
         $id = $this->decodeArticleId($id);
         $info = Content::findFirst([
@@ -105,7 +113,7 @@ string $author, int $status, array $extra = array(), string $intro = '')
                 $id
             ]
         ]);
-        return $info;
+        return $info->toArray();
     }
 
     public function deleteArticle($id)
@@ -137,22 +145,49 @@ string $author, int $status, array $extra = array(), string $intro = '')
         return $query->execute()->toArray();
     }
 
-    public function articleNumber($categoryId = 0, $keyword = '')
+    public function articleNumber($categoryId = 0, $keyword = '', $status = null)
     {
         $query = Content::query()
             ->columns('count(*) as num');
         // todo 这里添加父类分类的查询
         if ($categoryId) {
-            $query->andWhere('category_id=0?', [
+            $query->andWhere('category_id=?0', [
                 $categoryId
             ]);
         }
+        if ($status !== null) {
+            $query->andWhere('status=?0', [$status]);
+        }
         if (!empty($keyword)) {
-            $query->andWhere('title like 0?', [
+            $query->andWhere('title like ?0', [
                 '%' . $keyword . '%'
             ]);
         }
         $result = $query->execute()->toArray();
         return intval($result[0]['num']);
+    }
+
+    public function updateStatusByIds(array $ids, int $status)
+    {
+        $phql = "UPDATE TopCms\Apps\Article\Models\Content SET status = ?0 WHERE id IN (" . implode(',', $ids)
+    . ")";
+        $modelsManager = Di::getDefault()->get('modelsManager');
+        $result = $modelsManager->executeQuery($phql, [
+            0 => $status,
+        ]);
+
+        if ($result->success() === false) {
+            $msgs = [];
+
+            $messages = $result->getMessages();
+
+            foreach ($messages as $message) {
+                $msgs[] = $message->getMessage();
+            }
+            return [false, $msgs];
+        } else {
+            return [true, 'success'];
+        }
+
     }
 }

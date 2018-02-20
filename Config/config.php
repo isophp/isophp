@@ -86,7 +86,8 @@ return new \Phalcon\Config([
                 ],
                 [
                     'app' => 'Article',
-                    'path' => '/article/add',
+                    'key' => '/article/add/',
+                    'path' => '/article/add/:articleId?',
                     'page' => 'AddArticle',
                     'name' => '发表文章',
                     'handlers' => ['Article','Category'],
