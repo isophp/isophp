@@ -6,7 +6,9 @@
  */
 namespace TopCms\Apps\Article\Handler;
 use TopCms\Apps\Article\ArticleInfo;
+use TopCms\Apps\Article\CategoryInfo;
 use TopCms\Framework\Exceptions\ApiParamErrorException;
+use TopCms\Framework\Log\Log;
 use TopCms\Framework\Mvc\Handler\BaseHandler;
 
 /**
@@ -29,7 +31,28 @@ class ArticleHandler extends BaseHandler
         if ($status) {
             $this->successJson(['message' => 'success', 'id' => $message]);
         } else {
-            throw new ApiParamErrorException($message);
+            $this->failJson(['msg' => $message]);
+        }
+    }
+
+    public function updateStatusByIdsAction($params)
+    {
+        $ids = $params['ids'] ?? 0;
+        $ids = explode(',', $ids);
+        $status = $params['status'] ?? null;
+        $ids = array_filter($ids, function($id) {
+            return is_numeric($id);
+        });
+        if (empty($ids) || !in_array($status, array(0, 1, 2, 3))) {
+            throw new ApiParamErrorException('参数丢失或错误');
+        }
+        $articleInfo = new ArticleInfo();
+        list($status, $message) = $articleInfo->updateStatusByIds($ids, $status);
+
+        if ($status) {
+            $this->successJson(['msg' => 'success']);
+        } else {
+            $this->failJson(['msg' => $message]);
         }
     }
 
@@ -43,9 +66,9 @@ class ArticleHandler extends BaseHandler
         $articleInfo = new ArticleInfo();
         list($status, $message) = $articleInfo->deleteArticle($id);
         if ($status) {
-            $this->successJson(['message' => 'success', 'id' => $id]);
+            $this->successJson(['msg' => 'success', 'id' => $id]);
         } else {
-            throw new ApiParamErrorException($message);
+            $this->failJson(['msg' => $message]);
         }
     }
 
@@ -68,7 +91,7 @@ class ArticleHandler extends BaseHandler
         if ($status) {
             $this->successJson(['message' => 'success', 'id' => $message]);
         } else {
-            throw new ApiParamErrorException($message);
+            $this->failJson(['msg' => $message]);
         }
     }
 
@@ -90,5 +113,18 @@ class ArticleHandler extends BaseHandler
             ]
         ];
         $this->successJson($data);
+    }
+    public function detailAction($params) {
+        $id = $params['id'] ?? '';
+        if (empty($id) || !is_numeric($id)) {
+            throw new ApiParamErrorException('param id error');
+        }
+        $articleInfo = new ArticleInfo();
+        $categoryInfo = new CategoryInfo();
+        $info = $articleInfo->getArticle($id);
+        $parents = $categoryInfo->getParentIdList($info['category_id']);
+        array_push($parents, $info['category_id']);
+        $info['cascader'] = $parents;
+        $this->successJson($info);
     }
 }

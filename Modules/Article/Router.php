@@ -11,5 +11,9 @@ return [
     '/article/{id:[a-zA-Z0-9]+}' => [
         'controller' => 'Index',
         'action' => 'detail'
+    ],
+    '/article/upload' => [
+        'controller' => 'File',
+        'action' => 'upload'
     ]
 ];

@@ -5,6 +5,7 @@
  * @date: 2018/1/13下午9:15
  */
 namespace TopCms\Apps\Article;
+
 use Hashids\Hashids;
 use Phalcon\Di;
 use TopCms\Apps\Article\Models\Content;
@@ -51,7 +52,7 @@ class ArticleInfo
 
 
     public function add(string $title, string $content, int $categoryId,
-string $author, int $status, array $extra = array(), string $intro = '')
+                        string $author, int $status, array $extra = array(), string $intro = '')
     {
         $info = [
             'title' => $title,
@@ -72,7 +73,7 @@ string $author, int $status, array $extra = array(), string $intro = '')
     }
 
     public function save(string $id, string $title, string $content, int $categoryId,
-                        string $author, int $status, array $extra = array(), string $intro = '')
+                         string $author, int $status, array $extra = array(), string $intro = '')
     {
         $id = $this->decodeArticleId($id);
         if (empty($id)) {
@@ -103,7 +104,7 @@ string $author, int $status, array $extra = array(), string $intro = '')
         return [true, $article->id];
     }
 
-    public function getArticle($id)
+    public function getArticle(int $id)
     {
         $id = $this->decodeArticleId($id);
         $info = Content::findFirst([
@@ -112,7 +113,7 @@ string $author, int $status, array $extra = array(), string $intro = '')
                 $id
             ]
         ]);
-        return $info;
+        return $info->toArray();
     }
 
     public function deleteArticle($id)
@@ -164,5 +165,29 @@ string $author, int $status, array $extra = array(), string $intro = '')
         }
         $result = $query->execute()->toArray();
         return intval($result[0]['num']);
+    }
+
+    public function updateStatusByIds(array $ids, int $status)
+    {
+        $phql = "UPDATE TopCms\Apps\Article\Models\Content SET status = ?0 WHERE id IN (" . implode(',', $ids)
+    . ")";
+        $modelsManager = Di::getDefault()->get('modelsManager');
+        $result = $modelsManager->executeQuery($phql, [
+            0 => $status,
+        ]);
+
+        if ($result->success() === false) {
+            $msgs = [];
+
+            $messages = $result->getMessages();
+
+            foreach ($messages as $message) {
+                $msgs[] = $message->getMessage();
+            }
+            return [false, $msgs];
+        } else {
+            return [true, 'success'];
+        }
+
     }
 }

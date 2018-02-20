@@ -19,6 +19,20 @@ class CategoryInfo
 {
     const CATEGORY_STATUS_ONLINE = 0;
     const CATEGORY_STATUS_DELETE = 1;
+
+    public function getParentIdList(int $id) {
+        $parents = [];
+        $category = Category::findFirst([
+            "id='$id'"
+        ]);
+        while ($category->parent_id) {
+            $category = Category::findFirst([
+                "id='$category->parent_id'"
+            ]);
+            array_unshift($parents, $category->id);
+        }
+        return $parents;
+    }
     public function getCategoryTree($status = 0) {
         $query = Category::query()
         ->columns([
@@ -54,6 +68,11 @@ class CategoryInfo
             if (!$category) {
                 return [false, '父节点不存在'];
             }
+        }
+        if (Category::findFirst([
+            "name='$name'"
+        ])) {
+            return [false, '栏目已经存在'];
         }
         $category = new Category([
             'name' => $name,

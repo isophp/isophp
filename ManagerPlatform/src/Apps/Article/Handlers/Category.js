@@ -2,6 +2,7 @@
  * Created by liushuai on 2018/1/13.
  */
 import {adminApiGate} from '../../../services/api';
+import {message} from 'antd';
 // todo 如何简化
 const defaultParams = {
     module: 'Article',
@@ -39,6 +40,10 @@ export default {
                     addLoading: false
                 },
             });
+            if (response.status == -1) {
+                message.warning(response.data.msg);
+                return;
+            }
             if (response && success && typeof success === 'function') {
                 success();
             }
@@ -64,7 +69,7 @@ export default {
                 payload: false,
             });
         },
-        * tree({ payload, callback }, {select, call, put}) {
+        * tree({ payload, success }, {select, call, put}) {
             yield put({
                 type: 'save',
                 payload: {
@@ -88,6 +93,9 @@ export default {
                     treeLoading: false
                 },
             });
+            if (success && typeof success === 'function') {
+                success();
+            }
         },
         * delete({payload, success, fail}, {call, put}){
             yield put({
@@ -102,14 +110,14 @@ export default {
             if (!response) {
                 return;
             }
-            if (response.status == -1) {
-                fail(response.data.msg);
-                return;
-            }
             yield put({
                 type: 'changeLoading',
                 payload: false,
             });
+            if (response.status == -1) {
+                message.warning(response.data.msg);
+                return;
+            }
             if (success && typeof success === 'function') {
                 success();
             }

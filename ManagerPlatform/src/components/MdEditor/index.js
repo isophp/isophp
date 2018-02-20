@@ -55,9 +55,8 @@ class Editor extends Component {
     };
 
     componentDidMount(){
-        let {config, onChange: changeValue, onSave} = this.props;
+        let {config, onChange: changeValue, onSave, content} = this.props;
         config = assign({}, defaultConfig, config);
-        let shuai='sfasdf';
         // 静态资源地址修改
         if(config.path !== defaultConfig.path){
             console.warn('Editor warning: Static resource address has changed, if you know exactly what you\'re doing, ignore this warning');
@@ -125,6 +124,7 @@ class EditorShow extends Component {
             htmlDecode, autoLoadKaTeX, pageBreak, atLink, emailLink, tex, taskList, emoji, flowChart,
             sequenceDiagram, previewCodeHighlight, path
         } = config;
+        consnole.log('llllllllłl1lllasdfadsf:' + markdown);
 
         this._init(path, function(){
             editormd.markdownToHTML(id, {

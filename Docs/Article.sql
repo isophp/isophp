@@ -27,3 +27,39 @@ create table if not exists `app_article_category`(
   primary key (`id`),
   unique key name(`name`) comment '栏目唯一key'
 )engine=InnoDb default charset=utf8;
+create table if not exists `app_article_file_id`(
+  `id` int not null auto_increment comment '自增id',
+  `file_source` varchar(64) not null comment '文件类型',
+  `updated_at` datetime null default null on update current_timestamp comment '更新时间',
+  `created_at` datetime not null default current_timestamp comment '创建时间',
+  primary key (`id`)
+)engine=InnoDb default charset=utf8;
+create table if not exists `app_article_file`(
+  `id` int not null auto_increment comment '自增id',
+  `file_id` int not null comment '全剧唯一id' ,
+  `file_source` varchar(64) not null comment '文件来源',
+  `author` varchar(64) not null comment '上传者',
+  `size` int not null comment '文件大小',
+  `file_path` varchar(256) not null comment '文件路径',
+  `updated_at` datetime null default null on update current_timestamp comment '更新时间',
+  `created_at` datetime not null default current_timestamp comment '创建时间',
+  primary key (`id`),
+  unique key file_id(`file_id`)
+)engine=InnoDb default charset=utf8;
+
+create table `app_article_file_0` like `app_article_file`;
+create table `app_article_file_1` like `app_article_file`;
+create table `app_article_file_2` like `app_article_file`;
+create table `app_article_file_3` like `app_article_file`;
+create table `app_article_file_4` like `app_article_file`;
+create table `app_article_file_5` like `app_article_file`;
+create table `app_article_file_6` like `app_article_file`;
+create table `app_article_file_7` like `app_article_file`;
+create table `app_article_file_8` like `app_article_file`;
+create table `app_article_file_9` like `app_article_file`;
+create table `app_article_file_10` like `app_article_file`;
+create table `app_article_file_11` like `app_article_file`;
+create table `app_article_file_12` like `app_article_file`;
+create table `app_article_file_13` like `app_article_file`;
+create table `app_article_file_14` like `app_article_file`;
+create table `app_article_file_15` like `app_article_file`;

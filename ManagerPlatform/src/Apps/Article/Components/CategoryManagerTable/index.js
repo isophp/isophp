@@ -6,7 +6,6 @@ import EditableCell from '../../../../components/EditableCell';
 class CategoryManagerTable extends PureComponent {
     state = {
         selectedRowKeys: [],
-        totalCallNo: 0,
     };
 
     componentWillReceiveProps(nextProps) {
@@ -14,21 +13,17 @@ class CategoryManagerTable extends PureComponent {
         if (nextProps.selectedRows.length === 0) {
             this.setState({
                 selectedRowKeys: [],
-                totalCallNo: 0,
             });
         }
     }
 
     handleRowSelectChange = (selectedRowKeys, selectedRows) => {
-        const totalCallNo = selectedRows.reduce((sum, val) => {
-            return sum + parseFloat(val.callNo, 10);
-        }, 0);
 
         if (this.props.onSelectRow) {
             this.props.onSelectRow(selectedRows);
         }
 
-        this.setState({selectedRowKeys, totalCallNo});
+        this.setState({selectedRowKeys});
     }
 
     handleTableChange = (pagination, filters, sorter) => {
@@ -52,7 +47,7 @@ class CategoryManagerTable extends PureComponent {
         }
     };
     render() {
-        const {selectedRowKeys, totalCallNo} = this.state;
+        const {selectedRowKeys} = this.state;
         const {data: {list, pagination}, loading} = this.props;
 
         const columns = [
@@ -101,8 +96,6 @@ class CategoryManagerTable extends PureComponent {
                     }
                     return <Fragment>
                         {changeStatus}
-                        <Divider type="vertical"/>
-                        <a href="">编辑</a>
                     </Fragment>
                 }
             }
@@ -129,7 +122,6 @@ class CategoryManagerTable extends PureComponent {
                         message={(
                             <div>
                                 已选择 <a style={{fontWeight: 600}}>{selectedRowKeys.length}</a> 项&nbsp;&nbsp;
-                                服务调用总计 <span style={{fontWeight: 600}}>{totalCallNo}</span> 万
                                 <a onClick={this.cleanSelectedKeys} style={{marginLeft: 24}}>清空</a>
                             </div>
                         )}
@@ -140,7 +132,6 @@ class CategoryManagerTable extends PureComponent {
                 <Table
                     loading={loading}
                     rowKey={record => record.id}
-                    rowSelection={rowSelection}
                     dataSource={list}
                     columns={columns}
                     pagination={paginationProps}

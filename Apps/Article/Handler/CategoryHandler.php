@@ -50,7 +50,7 @@ class CategoryHandler extends BaseHandler
         if ($status) {
             $this->successJson(['id' => $message]);
         } else {
-            throw new ApiParamErrorException($message);
+            $this->failJson(['msg' => $message]);
         }
     }
 

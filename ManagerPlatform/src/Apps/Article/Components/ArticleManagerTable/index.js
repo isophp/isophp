@@ -1,11 +1,11 @@
 import React, {PureComponent, Fragment} from 'react';
 import {Table, Alert, Badge, Divider} from 'antd';
+import {Link} from 'dva/router';
 import styles from './index.less';
 
 class ArticleManagerTable extends PureComponent {
     state = {
         selectedRowKeys: [],
-        totalCallNo: 0,
     };
 
     componentWillReceiveProps(nextProps) {
@@ -13,21 +13,17 @@ class ArticleManagerTable extends PureComponent {
         if (nextProps.selectedRows.length === 0) {
             this.setState({
                 selectedRowKeys: [],
-                totalCallNo: 0,
             });
         }
     }
 
     handleRowSelectChange = (selectedRowKeys, selectedRows) => {
-        const totalCallNo = selectedRows.reduce((sum, val) => {
-            return sum + parseFloat(val.callNo, 10);
-        }, 0);
 
         if (this.props.onSelectRow) {
             this.props.onSelectRow(selectedRows);
         }
 
-        this.setState({selectedRowKeys, totalCallNo});
+        this.setState({selectedRowKeys});
     }
 
     handleTableChange = (pagination, filters, sorter) => {
@@ -42,7 +38,7 @@ class ArticleManagerTable extends PureComponent {
         this.props.onDelete(e.target.dataset.id);
     };
     render() {
-        const {selectedRowKeys, totalCallNo} = this.state;
+        const {selectedRowKeys} = this.state;
         const {data: {list, pagination}, loading} = this.props;
 
         const columns = [
@@ -83,13 +79,19 @@ class ArticleManagerTable extends PureComponent {
             },
             {
                 title: '操作',
-                render: (text, record) => (
-                    <Fragment>
-                        <a href="" data-id={record.id} onClick={this.handleTableDelete}>删除</a>
+                render: (text, record) => {
+                    let operate = '';
+                    if (record.status == 3) {
+                        operate = <a href="" data-id={record.id} onClick={(e) => this.props.onDelete(record.id, 2, e)}>发布</a>;
+                    } else {
+                        operate = <a href="" data-id={record.id} onClick={(e) => this.props.onDelete(record.id, 3, e)}>下架</a>;
+                    }
+                    return <Fragment>
+                        {operate}
                         <Divider type="vertical"/>
-                        <a href="">编辑</a>
+                        <Link  to={"/article/add/" + record.id}>编辑</Link>
                     </Fragment>
-                ),
+                }
             }
         ];
 
@@ -114,7 +116,6 @@ class ArticleManagerTable extends PureComponent {
                         message={(
                             <div>
                                 已选择 <a style={{fontWeight: 600}}>{selectedRowKeys.length}</a> 项&nbsp;&nbsp;
-                                服务调用总计 <span style={{fontWeight: 600}}>{totalCallNo}</span> 万
                                 <a onClick={this.cleanSelectedKeys} style={{marginLeft: 24}}>清空</a>
                             </div>
                         )}

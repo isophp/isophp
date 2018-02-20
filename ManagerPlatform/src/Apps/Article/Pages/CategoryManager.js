@@ -203,6 +203,7 @@ export default class CategoryManager extends PureComponent {
                                 options={options}
                                 placeholder="父栏目"
                                 showSearch
+                                changeOnSelect
                             />
                         </FormItem>
                         <FormItem

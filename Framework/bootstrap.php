@@ -10,6 +10,8 @@
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', dirname(__DIR__) . '/Apps');
 define('FW_PATH', __DIR__);
+define('PUBLIC_PATH', BASE_PATH . '/public');
+define('UPLOAD_PATH', PUBLIC_PATH . '/upload');
 
 require_once FW_PATH . '/Common/Constant.php';
 require_once __DIR__ . '/Common/Func.php';

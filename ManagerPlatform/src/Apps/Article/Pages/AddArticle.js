@@ -28,20 +28,47 @@ export default class AddArticle extends PureComponent {
     state = {
         categoryId: 0,
         content: '',
-        categoryInvalid: false
+        categoryInvalid: false,
+        cascader: [],
     };
 
     componentDidMount() {
         const {dispatch} = this.props;
+        const articleId = this.props.match.params.articleId;
         dispatch({
             type: 'Category/tree',
+            success: function () {
+                if (articleId && !isNaN(articleId)) {
+                    dispatch({
+                        type: 'Article/detail',
+                        payload: {
+                            id: articleId
+                        }
+                    });
+                } else {
+                    dispatch({
+                        type: 'Article/save',
+                        payload: {
+                            articleInfo: {}
+                        }
+                    });
+                }
+            }
         });
     };
 
     markdownChange(value) {
-        this.setState({
-            content: value
-        });
+        const {Article:{articleInfo}, dispatch} = this.props;
+        dispatch({
+                type: 'Article/save',
+                payload: {
+                    articleInfo: {
+                        ...articleInfo,
+                        content: value
+                    }
+                }
+            }
+        );
     };
 
     generateCategoryOptions = (categoryList) => {
@@ -56,40 +83,49 @@ export default class AddArticle extends PureComponent {
     };
 
     onCategoryChange(value, selectedOptions) {
+        const {dispatch} = this.props;
+        const {Article:{articleInfo}} = this.props;
         this.setState({
-            categoryId: value[value.length - 1],
             categoryInvalid: false,
         });
+        dispatch({
+                type: 'Article/save',
+                payload: {
+                    articleInfo: {
+                        ...articleInfo,
+                        category_id: value[value.length - 1],
+                        cascader: value
+                    }
+                }
+            }
+        );
     };
 
     submit(status) {
-        const {categoryId, content} = this.state;
-        const {Article:{id: articleId}} = this.props;
-        console.log(articleId);
-        const {dispatch} = this.props;
+        const {Article:{articleInfo}, dispatch} = this.props;
         this.props.form.validateFields((err, fieldsValue) => {
             if (err) {
                 message.warn('请正确填写信息');
                 return;
             }
-            if (categoryId == 0) {
+            if (!articleInfo.category_id) {
                 this.setState({
                     categoryInvalid: true
                 });
                 message.warn('请选择栏目');
                 return;
             }
-            if (content.length == 0) {
+            if (articleInfo.content.length == 0) {
                 message.warn('文章内容不能为空');
                 return;
             }
-            if (articleId) {
+            if (articleInfo.id) {
                 dispatch({
                         type: 'Article/update',
                         payload: {
-                            id: articleId,
-                            content: content,
-                            categoryId: categoryId,
+                            id: articleInfo.id,
+                            content: articleInfo.content,
+                            categoryId: articleInfo.category_id,
                             status: status,
                             ...fieldsValue
                         },
@@ -102,8 +138,8 @@ export default class AddArticle extends PureComponent {
                 dispatch({
                         type: 'Article/add',
                         payload: {
-                            content: content,
-                            categoryId: categoryId,
+                            content: articleInfo.content,
+                            categoryId: articleInfo.category_id,
                             status: status,
                             ...fieldsValue
                         },
@@ -118,10 +154,50 @@ export default class AddArticle extends PureComponent {
 
     render() {
         const {getFieldDecorator, getFieldValue, onSubmit} = this.props.form;
-        const {Article:{loading: articleLoading}} = this.props;
-        const _this = this;
+        const {Article:{loading: articleLoading,
+            articleInfo:{category_id:categoryId, content, title, id:articleId, cascader}}} = this.props;
         const {Category: {tree}} = this.props;
+        console.log(cascader);
         const options = this.generateCategoryOptions(tree);
+        let editor = <div></div>;
+        if (!this.props.match.params.articleId || (this.props.match.params.articleId
+            &&this.props.match.params.articleId == articleId && content && content.length)) {
+            editor = <Editor onSave={this.submit.bind(this)} onChange={this.markdownChange.bind(this)} config={
+                {
+                    toolbarIcons: function () {
+                        return ["bold", "del", "italic", "quote", "|",
+                            "list-ul", "list-ol", "hr", "|",
+                            "link", "reference-link", "image", "table", "datetime", "html-entities", "|",
+                            "goto-line", "watch", "preview", "fullscreen", "search", "|", "save"
+                        ];
+                    },
+                    toolbarIconsClass: {
+                        save: "fa-floppy-o"  // 指定一个FontAawsome的图标类
+                    },
+                    toolbarIconTexts: {
+                        save: "保存"  // 如果没有图标，则可以这样直接插入内容，可以是字符串或HTML标签
+                    },
+                    toolbarHandlers: {
+                        save: function (cm, icon, cursor, selection) {
+                            this.settings.mySave();
+                        }
+                    },
+                    path: '/js/',
+                    autoLoadModules: true,
+                    toolbarAutoFixed: false,
+                    placeholder: 'coding now!',
+                    codeFold: true,
+                    markdown: content || '',
+                    onload: (editor, func) => {
+                        let md = editor.getMarkdown();
+                        let html = editor.getHTML();
+                    },
+                    imageUpload    : true,
+                    imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                    imageUploadURL : "/article/upload",
+                }
+            }/>
+        }
         return <PageHeaderLayout>
             <Spin spinning={articleLoading}>
             <div className={Style.content}>
@@ -140,6 +216,7 @@ export default class AddArticle extends PureComponent {
                                 required: true,
                                 message: '请填写标题',
                             }],
+                            initialValue: title
                         })(
                             <Input/>
                         )}
@@ -154,41 +231,11 @@ export default class AddArticle extends PureComponent {
                             options={options}
                             placeholder="文章栏目"
                             showSearch
+                            value={cascader}
                         />
                     </Form.Item>
                 </Form>
-                <Editor onSave={this.submit.bind(this)} onChange={this.markdownChange.bind(this)} config={
-                    {
-                        toolbarIcons: function () {
-                            return ["bold", "del", "italic", "quote", "|",
-                                "list-ul", "list-ol", "hr", "|",
-                                "link", "reference-link", "image", "table", "datetime", "html-entities", "|",
-                                "goto-line", "watch", "preview", "fullscreen", "search", "|", "save"
-                            ];
-                        },
-                        toolbarIconsClass: {
-                            save: "fa-floppy-o"  // 指定一个FontAawsome的图标类
-                        },
-                        toolbarIconTexts: {
-                            save: "保存"  // 如果没有图标，则可以这样直接插入内容，可以是字符串或HTML标签
-                        },
-                        toolbarHandlers: {
-                            save: function (cm, icon, cursor, selection) {
-                                this.settings.mySave();
-                            }
-                        },
-                        path: '/js/',
-                        autoLoadModules: true,
-                        toolbarAutoFixed: false,
-                        placeholder: 'coding now!',
-                        codeFold: true,
-                        markdown: ``,
-                        onload: (editor, func) => {
-                            let md = editor.getMarkdown();
-                            let html = editor.getHTML();
-                        }
-                    }
-                }/>
+                {editor}
             </div>
             </Spin>
         </PageHeaderLayout>

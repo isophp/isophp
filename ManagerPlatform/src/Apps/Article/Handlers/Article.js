@@ -10,15 +10,67 @@ const defaultParams = {
 export default {
     namespace: 'Article',
     state: {
-        id: 0,
         loading: false,
         listLoading: false,
+        articleInfo: {
+            content: '',
+            categoryId: null,
+            id: 0
+        },
         data: {
             list: [],
             pagination: {},
         },
     },
     effects: {
+        * updateStatusByIds({payload, success}, {call, put}) {
+            yield put({
+                type: 'changeLoading',
+                payload: true,
+            });
+            const response = yield call(adminApiGate, {
+                ...defaultParams,
+                method: 'updateStatusByIds',
+                payload: payload
+            });
+            if (!response) {
+                return;
+            }
+            yield put({
+                type: 'changeLoading',
+                payload: false,
+            });
+            if (success && typeof success === 'function') {
+                success();
+            }
+        },
+        * detail({payload, success}, {call, put}) {
+            yield put({
+                type: 'changeLoading',
+                payload: true,
+            });
+            const response = yield call(adminApiGate, {
+                ...defaultParams,
+                method: 'detail',
+                payload: payload
+            });
+            if (!response) {
+                return;
+            }
+            yield put({
+                type: 'save',
+                payload: {
+                    articleInfo: response.data
+                },
+            });
+            yield put({
+                type: 'changeLoading',
+                payload: false,
+            });
+            if (success && typeof success === 'function') {
+                success();
+            }
+        },
         * add({ payload,success}, {select, call, put}) {
             yield put({
                 type: 'changeLoading',
@@ -32,10 +84,14 @@ export default {
             if (!response) {
                 return;
             }
+            const articleInfo = yield select(state => state.Article.articleInfo);
             yield put({
                 type: 'save',
                 payload: {
-                    id: response.data.id
+                    articleInfo: {
+                        ...articleInfo,
+                        id: response.data.id
+                    }
                 },
             });
             yield put({
@@ -153,12 +209,11 @@ export default {
     subscriptions: {
         setup({dispatch, history}) {
             return history.listen(({pathname, query}) => {
-                    if (pathname === '/article/add') {
-                    dispatch({type: 'save', payload: {
-                        id: 0,
-                        loading: false
-                    }});
-                }
+                dispatch({type: 'save', payload: {
+                    id: 0,
+                    loading: false,
+                    articleInfo: {}
+                }});
             });
         }
     }
