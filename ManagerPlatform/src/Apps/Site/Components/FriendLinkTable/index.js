@@ -38,12 +38,12 @@ class CategoryManagerTable extends PureComponent {
         this.props.onDelete(id, status);
     };
     onCellChange = (id, field) => {
-        const {updateCategory} = this.props;
+        const {updateInfo} = this.props;
         return (text, success, fail) => {
             const payload = {};
             payload.id = id;
             payload[field] = text;
-            return updateCategory(payload, success, fail);
+            return updateInfo(payload, success, fail);
         }
     };
     render() {
@@ -105,10 +105,10 @@ class CategoryManagerTable extends PureComponent {
                 title: '操作',
                 render: (text, record) => {
                     let changeStatus = '';
-                    if (record.del == 0) {
-                        changeStatus = <a href="" onClick={(e) => this.handleTableDelete(record.id, 1, e)}>删除</a>
+                    if (record.status == 0) {
+                        changeStatus = <a href="" onClick={(e) => this.handleTableDelete(record.id, 1, e)}>下线</a>
                     } else {
-                        changeStatus = <a href="" onClick={(e) => this.handleTableDelete(record.id, 0, e)}>取消删除</a>;
+                        changeStatus = <a href="" onClick={(e) => this.handleTableDelete(record.id, 0, e)}>取消下线</a>;
                     }
                     return <Fragment>
                         {changeStatus}

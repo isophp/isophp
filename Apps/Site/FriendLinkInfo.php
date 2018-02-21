@@ -7,6 +7,7 @@
 
 namespace TopCms\Apps\Site;
 
+use Phalcon\Di;
 use TopCms\Apps\Site\Models\FriendLink;
 use TopCms\Framework\Log\Log;
 
@@ -66,6 +67,30 @@ class FriendLinkInfo
         } else {
             return [true, $friendLink->id];
         }
+    }
+
+    public function updateStatusByIds(array $ids, int $status)
+    {
+        $phql = "UPDATE TopCms\Apps\Site\Models\FriendLink SET status = ?0 WHERE id IN (" . implode(',', $ids)
+            . ")";
+        $modelsManager = Di::getDefault()->get('modelsManager');
+        $result = $modelsManager->executeQuery($phql, [
+            0 => $status,
+        ]);
+
+        if ($result->success() === false) {
+            $msgs = [];
+
+            $messages = $result->getMessages();
+
+            foreach ($messages as $message) {
+                $msgs[] = $message->getMessage();
+            }
+            return [false, $msgs];
+        } else {
+            return [true, 'success'];
+        }
+
     }
 
 }

@@ -24,10 +24,9 @@ export default function dealResponse(response, success, fail)
         return;
     }
     if (response.status === 0) {
+        showMsg(response, true);
         if (success) {
             success();
-        } else {
-            showMsg(response, true);
         }
     } else if (response.status === -1) {
         showMsg(response, false);

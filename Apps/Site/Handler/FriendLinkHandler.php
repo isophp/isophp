@@ -69,6 +69,27 @@ class FriendLinkHandler extends BaseHandler
         }
     }
 
+    public function updateStatusByIdsAction($params)
+    {
+        $ids = $params['ids'] ?? 0;
+        $ids = explode(',', $ids);
+        $status = $params['status'] ?? null;
+        $ids = array_filter($ids, function($id) {
+            return is_numeric($id);
+        });
+        if (empty($ids) || !in_array($status, array(0, 1))) {
+            throw new ApiParamErrorException('参数丢失或错误');
+        }
+        $friendLinkInfo = new FriendLinkInfo();
+        list($status, $message) = $friendLinkInfo->updateStatusByIds($ids, $status);
+
+        if ($status) {
+            $this->successJson(['msg' => 'success']);
+        } else {
+            $this->failJson(['msg' => $message]);
+        }
+    }
+
     public function changeStatusAction()
     {
 

@@ -87,40 +87,46 @@ export default {
             });
             dealResponse(response, success, fail);
         },
-        * delete({payload, success}, {call, put}){
+        * delete({payload, success, fail}, {call, put}){
             yield put({
-                type: 'changeLoading',
-                payload: true,
+                type: 'save',
+                payload: {
+                    loading: true
+                },
             });
             const response = yield call(adminApiGate, {
                 ...defaultParams,
                 method: 'delete',
                 payload: payload
             });
-            if (!response) {
-                return;
-            }
-            yield put({
-                type: 'save',
-                payload: response.data,
-            });
-            yield put({
-                type: 'changeLoading',
-                payload: false,
-            });
-            if (success && typeof success === 'function') {
-                success();
-            }
-        },
-        * clear({payload,success}, {call, put}){
             yield put({
                 type: 'save',
                 payload: {
-                    id: 0,
                     loading: false
                 },
             });
-        }
+            dealResponse(response, success, fail)
+        },
+        * updateStatusByIds({ payload,success, fail}, {select, call, put}) {
+            yield put({
+                type: 'save',
+                payload: {
+                    loading: true
+                },
+            });
+            const response = yield call(adminApiGate, {
+                ...defaultParams,
+                method: 'updateStatusByIds',
+                payload: payload
+            });
+            yield put({
+                type: 'save',
+                payload: {
+                    loading: false
+                },
+            });
+            dealResponse(response, success, fail);
+        },
     },
     reducers: {
         save(state, action) {

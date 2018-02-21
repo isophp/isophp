@@ -2,7 +2,7 @@ import {PureComponent} from "react";
 import {connect} from 'dva';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
 import {Card, Button, Form, Modal, Input, Cascader, message, Spin} from 'antd';
-import CategoryManagerTable from '../Components/FriendLinkTable';
+import FriendLinkTable from '../Components/FriendLinkTable';
 const FormItem = Form.Item;
 
 @connect(state => ({
@@ -102,46 +102,26 @@ export default class FriendLink extends PureComponent {
         return categoryList;
     };
 
-    handleTableDelete = (id, status) => {
+    updateStatusByIds = (ids, status) => {
         const {dispatch} = this.props;
-        if (status == 1) {
-            dispatch({
-                type: 'Category/delete',
-                payload: {
-                    id: id
-                },
-                success: () => {
-                    message.success('删除成功！');
-                    this.fetch();
-                },
-                fail: (msg) => {
-                    message.warning(msg);
-                }
-            });
-        } else {
-            dispatch({
-                type: 'Category/cancelDelete',
-                payload: {
-                    id: id
-                },
-                success: () => {
-                    message.success('取消删除成功！');
-                    this.fetch();
-                },
-                fail: (msg) => {
-                    message.warning(msg);
-                }
-            });
-        }
+        dispatch({
+            type: 'FriendLink/updateStatusByIds',
+            payload: {
+                ids: ids,
+                status: status
+            },
+            success: () => {
+                this.fetch();
+            }
+        });
     };
 
-    updateCategory(payload, success, fail) {
+    updateInfo(payload, success, fail) {
         const {dispatch} = this.props;
         dispatch({
             type: 'FriendLink/update',
             payload: payload,
             success: () => {
-                message.success('修改成功！');
                 success();
             },
             fail: () => {
@@ -166,14 +146,14 @@ export default class FriendLink extends PureComponent {
                 <div>
                     <Button icon="plus" type="primary" onClick={() => this.addFriendLink(true)}>添加友情链接</Button>
                 </div>
-                <CategoryManagerTable
+                <FriendLinkTable
                     selectedRows={selectedRows}
                     loading={loading}
                     data={data}
                     onSelectRow={this.handleSelectRows}
                     onChange={this.handleStandardTableChange}
-                    onDelete={this.handleTableDelete}
-                    updateCategory={this.updateCategory.bind(this)}
+                    onDelete={this.updateStatusByIds}
+                    updateInfo={this.updateInfo.bind(this)}
                 />
             </Card>
 
