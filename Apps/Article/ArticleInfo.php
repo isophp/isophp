@@ -104,7 +104,7 @@ class ArticleInfo
         return [true, $article->id];
     }
 
-    public function getArticle(int $id)
+    public function getArticle($id)
     {
         $id = $this->decodeArticleId($id);
         $info = Content::findFirst([
@@ -113,6 +113,9 @@ class ArticleInfo
                 $id
             ]
         ]);
+        if (!$info) {
+            return false;
+        }
         return $info->toArray();
     }
 

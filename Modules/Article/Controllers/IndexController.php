@@ -17,7 +17,10 @@ class IndexController extends BaseController
     {
         $articleId = $this->dispatcher->getParam("id");
         $articleInfo = new ArticleInfo();
-        $info = $articleInfo->getArticle($articleId)->toArray();
+        $info = $articleInfo->getArticle($articleId);
+        if (!$info) {
+            return $this->show404();
+        }
         $parseDown = new \Parsedown();
         if ($cache = $this->getViewFromCache()) {
             $info['content'] = $cache;

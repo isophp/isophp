@@ -21,4 +21,8 @@ return [
         'controller' => 'Api_handler',
         'action' => 'index',
     ],
+    '/404' => [
+        'controller' => 'index',
+        'action' => 'show404',
+    ]
 ];

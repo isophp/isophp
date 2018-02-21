@@ -56,16 +56,24 @@ return new \Phalcon\Config([
         ],
         [
             'layout' => 'BasicLayout',
-            'path' => '/sys',
+            'path' => '/site',
             'name' => '系统',
             'icon' => 'dashboard',
             'pages' => [
                 [
                     'app' => 'User',
-                    'path' => '/sys/index',
+                    'path' => '/site/index',
                     'page' => 'UserManager',
                     'name' => '系统状态',
                     'handlers' => ['User'],
+                    'icon' => 'profile'
+                ],
+                [
+                    'app' => 'Site',
+                    'path' => '/site/friendLink',
+                    'page' => 'FriendLink',
+                    'name' => '友情链接',
+                    'handlers' => ['FriendLink'],
                     'icon' => 'profile'
                 ]
             ]

@@ -122,9 +122,13 @@ class ArticleHandler extends BaseHandler
         $articleInfo = new ArticleInfo();
         $categoryInfo = new CategoryInfo();
         $info = $articleInfo->getArticle($id);
-        $parents = $categoryInfo->getParentIdList($info['category_id']);
-        array_push($parents, $info['category_id']);
-        $info['cascader'] = $parents;
-        $this->successJson($info);
+        if (!$info) {
+            $this->failJson(['msg' => '文章不存在']);
+        } else {
+            $parents = $categoryInfo->getParentIdList($info['category_id']);
+            array_push($parents, $info['category_id']);
+            $info['cascader'] = $parents;
+            $this->successJson($info);
+        }
     }
 }

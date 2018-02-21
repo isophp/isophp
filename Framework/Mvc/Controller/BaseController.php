@@ -17,11 +17,7 @@ class BaseController extends Controller
 {
     public function show404()
     {
-        $this->dispatcher->forward([
-            'module' => 'Sys',
-            'controller' => 'index',
-            'action' => 'show404',
-        ]);
+        $this->response->redirect('/404');
     }
     public function successJson($data)
     {
