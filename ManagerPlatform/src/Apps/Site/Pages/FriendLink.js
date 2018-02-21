@@ -64,13 +64,6 @@ export default class FriendLink extends PureComponent {
         });
     };
 
-    onCategoryChange(value, selectedOptions) {
-        this.setState({
-            categoryId: value[value.length - 1],
-            categoryInvalid: false,
-        });
-    };
-
     handleAdd = () => {
         const {dispatch} = this.props;
         const fetch = this.fetch.bind(this);
@@ -90,16 +83,6 @@ export default class FriendLink extends PureComponent {
                     }
                 });            }
         });
-    };
-    generateCategoryOptions = (categoryList) => {
-        categoryList.forEach(function (item, index) {
-            categoryList[index].value = item.id;
-            categoryList[index].label = item.name;
-            if (item.children) {
-                categoryList[index].children = this.generateCategoryOptions(item.children);
-            }
-        }, this);
-        return categoryList;
     };
 
     updateStatusByIds = (ids, status) => {
