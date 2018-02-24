@@ -10,6 +10,7 @@ namespace TopCms\Apps\User\Handler;
 
 use Phalcon\Di;
 use TopCms\Apps\User\Acl;
+use TopCms\Apps\User\Login;
 use TopCms\Framework\Exceptions\ApiParamErrorException;
 use TopCms\Framework\Mvc\Handler\BaseHandler;
 /**
@@ -21,21 +22,34 @@ class LoginHandler extends BaseHandler
     public function getCurUserAction($params= array())
     {
         $di = Di::getDefault();
-        // 这里进行参数检查
-        if (false) {
-            // 参数错误，抛出异常即可
-            throw new ApiParamErrorException('参数错误');
-        }
-        // 具体数据操作使用Apps/User目录下的类，例如这里是Acl,Acl相当于Repository,去操作Models下的model。
-        // 同时Acl这些也会被前端页面controller调用
+        $login = new Login();
+        $user = $login->getCurUser();
+
         $acl = new Acl();
-        $data = $acl->getCurUser();
-        // 这里进行数据结构封装，例如BaseHandler例如successJson()
-        // 返回status通常都是0，表示成功，因为不合法的会以抛出异常的方法返回。保留status可用于不同业务需求
-        sleep(2);
+        $role_id = 4;
+        if (!empty($user)) {
+            $role_id = $user->role_id;
+        }
+        $menu = $acl->getMenuByRoleId($role_id);
         $this->successJson([
-            'userInfo' => $data,
-            'menu' => $di->getShared('config')->menu->toArray()
+            'userInfo' => $user,
+            'menu' => $menu
         ]);
+    }
+
+    public function loginAction($params)
+    {
+        $identifier = $params['identifier'] ?? '';
+        $credential = $params['credential'] ?? '';
+        if (empty($identifier) || empty($credential)) {
+            throw new ApiParamErrorException('param error');
+        }
+        $login = new Login();
+        $status = $login->login($identifier, $credential);
+        if ($status) {
+            $this->successJson(['msg' => '登录成功!']);
+        } else {
+            $this->failJson(['msg' => '用户名或密码错误！！']);
+        }
     }
 }

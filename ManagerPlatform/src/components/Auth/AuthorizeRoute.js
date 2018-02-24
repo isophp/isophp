@@ -1,5 +1,5 @@
-import React,{Component, createElement, Fragment} from 'react';
-import { Route } from 'dva/router';
+import React, {Component, createElement, Fragment} from 'react';
+import {Route} from 'dva/router';
 import {connect} from 'dva';
 import {Spin} from 'antd';
 import styles from './AuthorizeRoute.less';
@@ -37,8 +37,8 @@ const dynamicWrapper = (application, models, app, component) => {
 };
 
 const formatMenuData = (menu) => {
-    return menu.map((item)=>{
-        const result ={
+    return menu.map((item) => {
+        const result = {
             ...item,
             path: item.path.replace(/^\//, '')
         };
@@ -49,14 +49,18 @@ const formatMenuData = (menu) => {
     });
 };
 
-const generateRouteData = (menu,routeData) => {
+const generateRouteData = (menu, routeData) => {
     return menu.map((item) => {
         const result = {
             path: item.path,
             name: item.name,
         };
         if (!item.pages || item.pages.length === 0) {
-            result.component = dynamicWrapper(application, item.handlers, item.app, () => import(`../../Apps/${item.app}/Pages/${item.page}`));
+            result.component = dynamicWrapper(application, item.handlers, item.app, () =>
+            import
+            (`../../Apps/${item.app}/Pages/${item.page}`)
+        )
+            ;
         }
         routeData[item.path] = result;
         if (item.pages) {
@@ -69,53 +73,63 @@ const generateRouteData = (menu,routeData) => {
 @connect((state) => ({
     Login: state.Login
 }))
-class AuthorizeRouteComponent extends Component{
-    state = {
-    };
-    constructor(props){
+class AuthorizeRouteComponent extends Component {
+    state = {};
+
+    constructor(props) {
         super(props);
-        const {dispatch} = this.props;
+        const {dispatch, history, location} = this.props;
         dispatch({
-            type: 'Login/getCurUser'
+            type: 'Login/getCurUser',
+            goLogin: function () {
+                if (location.pathname != '/login') {
+                    history.push('/login');
+                }
+            },
+            hasLogin: function () {
+                if (location.pathname == '/login') {
+                    history.push('/');
+                }
+            }
         });
     };
-    render(){
-        const {Login:{currentUser:{userInfo, menu}}} = this.props;
-        if (true) {
-            if (!userInfo) {
-                return <Spin size="large" className={styles.globalSpin} />;
-            }
-            const menuData = formatMenuData([...menu]);
-            const routerData = {};
-            generateRouteData(menu, routerData);
-            routerDataCache = routerData;
 
-            const render = [];
-            menu.forEach(function (item, index) {
-                const Component =() => import(`../../layouts/${item.layout}`);
-                const Layout = (props) => {
-                    return createElement(Component().default, {
-                        ...props,
-                        routerData: routerData,
-                        menuData: menuData,
-                    })
-                };
-                render.push(
-                    <Route
-                        key={item.path}
-                        path={item.path}
-                        render={(props) => <Layout {...props}/>}
-                    />
-                );
-            });
-            return (
-                <Fragment>
-                    {render}
-                </Fragment>
-            )
-        } else {
-            return null;
+    render() {
+        const {Login:{currentUser:{userInfo, menu}}, loading} = this.props;
+        if (loading) {
+            return <Spin size="large" className={styles.globalSpin}/>;
         }
+        const menuData = formatMenuData([...menu]);
+        const routerData = {};
+        generateRouteData(menu, routerData);
+        routerDataCache = routerData;
+
+        const render = [];
+        menu.forEach(function (item, index) {
+            const Component = () =>
+            import
+            (`../../layouts/${item.layout}`);
+            const Layout = (props) => {
+                return createElement(Component().default, {
+                    ...props,
+                    routerData: routerData,
+                    menuData: menuData,
+                    currentUser: userInfo
+                })
+            };
+            render.push(
+                <Route
+                    key={item.path}
+                    path={item.path}
+                    render={(props) => <Layout {...props}/>}
+                />
+            );
+        });
+        return (
+            <Fragment>
+                {render}
+            </Fragment>
+        )
     };
 }
 

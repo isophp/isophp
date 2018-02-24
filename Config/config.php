@@ -37,6 +37,24 @@ return new \Phalcon\Config([
         'User',
         'any'
     ],
+    'guestMenu' => [
+        [
+            'layout' => 'UserLayout',
+            'path' => '/',
+            'name' => '登录',
+            'icon' => 'user',
+            'pages' => [
+                [
+                    'app' => 'User',
+                    'path' => '/login',
+                    'page' => 'Login',
+                    'name' => '登录',
+                    'handlers' => ['User'],
+                    'icon' => 'team'
+                ]
+            ]
+        ]
+    ],
     'menu' => [
         [
             'layout' => 'BasicLayout',

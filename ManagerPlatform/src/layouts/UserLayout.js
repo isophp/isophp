@@ -23,15 +23,15 @@ const links = [{
   href: '',
 }];
 
-const copyright = <div>Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品</div>;
+const copyright = <div>Copyright <Icon type="copyright" /> 2018 ISOPHP团队出品</div>;
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {
-    const { menu, location } = this.props;
+    const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = 'Ant Design Pro';
-    if (menu[pathname] && menu[pathname].name) {
-      title = `${menu[pathname].name} - Ant Design Pro`;
+    let title = 'ISOPHP';
+    if (routerData[pathname] && routerData[pathname].name) {
+      title = `${routerData[pathname].name} - ISOPHP`;
     }
     return title;
   }
@@ -47,14 +47,21 @@ class UserLayout extends React.PureComponent {
                 <span className={styles.title}>Ant Design</span>
               </Link>
             </div>
-            <div className={styles.desc}>Ant Design 是西湖区最具影响力的 Web 设计规范</div>
+            <div className={styles.desc}>ISOPHP社区</div>
           </div>
             <Switch>
-            <Route
-                  key={menu.page.path}
-                  path={menu.page.path}
-                  component={(props) => <Login/>}
-                />
+                {
+                    getRoutes(match.path, routerData).map(item =>
+                        (
+                            <Route
+                                key={item.key}
+                                path={item.path}
+                                component={item.component}
+                                redirectPath="/exception/403"
+                            />
+                        )
+                    )
+                }
             </Switch>
           <GlobalFooter className={styles.footer} links={links} copyright={copyright} />
         </div>

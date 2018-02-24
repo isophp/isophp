@@ -105,7 +105,7 @@ class BasicLayout extends React.PureComponent {
   };
   render() {
     const {
-      currentUser, collapsed, fetchingNotices, notices, routerData,menuData, match, location,
+        currentUser, collapsed, fetchingNotices, notices, routerData,menuData, match, location,
     } = this.props;
     const layout = (
       <Layout>
@@ -190,7 +190,6 @@ class BasicLayout extends React.PureComponent {
 }
 
 export default connect(({ User, Global, loading }) => ({
-  currentUser: User.currentUser,
   collapsed: Global.collapsed,
   fetchingNotices: loading.effects['Global/fetchNotices'],
   notices: Global.notices,

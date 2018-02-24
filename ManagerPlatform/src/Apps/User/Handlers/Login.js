@@ -1,4 +1,6 @@
 import {adminApiGate} from '../../../services/api';
+import dealResponse from '../../../utils/dealResponse';
+
 // todo 如何简化
 const defaultParams = {
     module: 'User',
@@ -15,24 +17,54 @@ export default {
     },
 
     effects: {
-        * getCurUser(_, {call, put}) {
+        * login({payload, success, fail}, {call, put}) {
+            yield put({
+                type: 'loading',
+                payload: true
+            });
+            const response = yield call(adminApiGate, {
+                ...defaultParams,
+                method: 'login',
+                payload: payload
+            })
+            yield put({
+                type: 'loading',
+                payload: false
+            });
+            dealResponse(response, success, fail);
+        },
+        * getCurUser({success, fail, goLogin, hasLogin}, {call, put}) {
+            yield put({
+                type: 'loading',
+                payload: true
+            });
             const response = yield call(adminApiGate, {
                 ...defaultParams,
                 method: 'getCurUser',
             });
             yield put({
+                type: 'loading',
+                payload: false
+            });
+            yield put({
                 type: 'saveCurrentUser',
                 payload: response.data,
             });
+            if (goLogin && response.data.userInfo == false) {
+                goLogin();
+            }
+            if (hasLogin && response.data.userInfo != false) {
+                hasLogin();
+            }
         },
     },
 
     reducers: {
-        changeLayoutCollapsed(state, { payload }) {
+        loading(state, action) {
             return {
                 ...state,
-                collapsed: payload,
-            };
+                loading: action.payload
+            }
         },
         save(state, action) {
             return {
@@ -40,25 +72,10 @@ export default {
                 data: action.payload,
             };
         },
-        changeLoading(state, action) {
-            return {
-                ...state,
-                loading: action.payload,
-            };
-        },
         saveCurrentUser(state, action) {
             return {
                 ...state,
                 currentUser: action.payload,
-            };
-        },
-        changeNotifyCount(state, action) {
-            return {
-                ...state,
-                currentUser: {
-                    ...state.currentUser,
-                    notifyCount: action.payload,
-                },
             };
         },
     },

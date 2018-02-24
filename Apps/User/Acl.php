@@ -10,6 +10,8 @@
 namespace TopCms\Apps\User;
 
 
+use Phalcon\Di;
+
 class Acl
 {
     public function getCurUser()
@@ -23,10 +25,35 @@ class Acl
         ];
     }
 
-    public function checkCurUserApiPermission($module, $method)
+    public function checkCurUserApiPermission($user, $module, $handler, $method)
     {
-        $user = $this->getCurUser();
-        return $this->checkUserApiPermission($user['id'], $module, $method);
+//        $aclList = Acl::findFirst([
+//            'conditions' => 'module=:module: and handler=:handler: and method=:method:',
+//            'bind' => [
+//            ]
+//        ]);
+//        if (!empty($aclList)) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+        if (empty($user) && ($method == 'getCurUser' || $method == 'login')) {
+            return true;
+        }
+        if (!empty($user)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getMenuByRoleId($roleId)
+    {
+        $di = Di::getDefault();
+        if ($roleId == 4) {
+            return $di->getShared('config')->guestMenu->toArray();
+        } else {
+            return $di->getShared('config')->menu->toArray();
+        }
     }
 
     public function checkUserApiPermission($userId, $module, $method)

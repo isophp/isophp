@@ -77,7 +77,7 @@ class ExceptionHandler
     {
         $whoops = new Run();
         $response = $di->getResponse();
-        if ($e instanceof ApiParamErrorException){
+        if ($e instanceof ApiException){
             $response->setStatusCode($e->getHttpCode());
             $response->setContent(json_encode([
                 'status' => $e->getHttpCode(),

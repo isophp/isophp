@@ -30,10 +30,10 @@ create table if not exists `app_user_role`(
   primary key (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-insert into `app_user_role` ('name') values('super');
-insert into `app_user_role` ('name') values('admin');
-insert into `app_user_role` ('name') values('member');
-insert into `app_user_role` ('name') values('guest');
-insert into `app_user_role` ('name') values('writer');
+insert into `app_user_role` (`name`) values('super');
+insert into `app_user_role` (`name`) values('admin');
+insert into `app_user_role` (`name`) values('member');
+insert into `app_user_role` (`name`) values('guest');
+insert into `app_user_role` (`name`) values('writer');
 
 

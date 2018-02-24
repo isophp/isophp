@@ -13,5 +13,14 @@ use TopCms\Framework\Mvc\Model\BaseModel;
 
 class Role extends BaseModel
 {
+    public $id;
+    public $name;
+    public $status;
+    public $updated_at;
+    public $created_at;
 
+    public function initialize()
+    {
+        $this->setSource("app_user_role");
+    }
 }
