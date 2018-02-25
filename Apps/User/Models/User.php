@@ -24,6 +24,11 @@ class User extends BaseModel
     public $created_at;
     public function initialize()
     {
+        $this->belongsTo(
+            'role_id',
+            'TopCms\Apps\User\Models\Role',
+            "id"
+        );
         $this->setSource("app_user_user");
     }
 

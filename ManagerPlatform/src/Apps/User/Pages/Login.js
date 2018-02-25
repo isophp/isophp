@@ -31,7 +31,7 @@ export default class LoginPage extends Component {
                     type,
                 },
                 success: function () {
-                    routerRedux.push('/');
+                    window.location = '/';
                 }
             });
         }
@@ -60,23 +60,13 @@ export default class LoginPage extends Component {
                     onSubmit={this.handleSubmit}
                 >
                     <Tab key="account" tab="账户密码登录">
-                        {
-                            this.renderMessage('账户或密码错误（admin/888888）')
-                        }
                         <UserName name="identifier" placeholder="username"/>
                         <Password name="credential" placeholder="password"/>
                     </Tab>
                     <Tab key="mobile" tab="手机号登录">
-                        {
-                            this.renderMessage('验证码错误')
-                        }
                         <Mobile name="mobile"/>
                         <Captcha name="captcha"/>
                     </Tab>
-                    <div>
-                        <Checkbox checked={this.state.autoLogin} onChange={this.changeAutoLogin}>自动登录</Checkbox>
-                        <a style={{float: 'right'}} href="">忘记密码</a>
-                    </div>
                     <Submit loading={loading}>登录</Submit>
                 </Login>
             </div>

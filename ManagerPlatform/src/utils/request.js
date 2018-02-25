@@ -27,7 +27,7 @@ function checkStatus(response) {
     message: `请求错误 ${response.status}: ${response.url}`,
     description: errortext,
   });
-  if (response.status = 401 && response.statusText == 'need Login') {
+  if (response.status == 401 && response.statusText == 'need Login') {
     window.location='/#/login';
   }
   return response;

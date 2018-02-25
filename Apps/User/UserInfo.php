@@ -8,6 +8,9 @@
 
 namespace TopCms\Apps\User;
 
+use Phalcon\Di;
+use TopCms\Apps\User\Models\User;
+
 /**
  * Class UserInfo
  * @package Apps\Auth
@@ -16,47 +19,21 @@ class UserInfo
 {
     public function getUserList($page, $pageSize)
     {
-        return [
-            [
-                'id' => 1,
-                'name' => 'Bob',
-                'address' => '北京',
-                'avatar' => 'http://upload.dianyingjie.com/2017/0404/1491275068881.jpeg',
-                'notifyCount' => 10,
-                'career' => 'PHP开发',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Tom',
-                'address' => '北京',
-                'avatar' => 'http://upload.dianyingjie.com/2017/0404/1491275068881.jpeg',
-                'notifyCount' => 10,
-                'career' => 'PHP开发',
-            ],
-            [
-                'id' => 3,
-                'name' => 'zeus',
-                'address' => '北京',
-                'avatar' => 'http://upload.dianyingjie.com/2017/0404/1491275068881.jpeg',
-                'notifyCount' => 10,
-                'career' => 'PHP开发',
-            ],
-            [
-                'id' => 4,
-                'name' => 'Hero',
-                'address' => '北京',
-                'avatar' => 'http://upload.dianyingjie.com/2017/0404/1491275068881.jpeg',
-                'notifyCount' => 10,
-                'career' => 'PHP开发',
-            ],
-            [
-                'id' => 5,
-                'name' => 'Prometheus',
-                'address' => '北京',
-                'avatar' => 'http://upload.dianyingjie.com/2017/0404/1491275068881.jpeg',
-                'notifyCount' => 10,
-                'career' => 'PHP开发',
-            ]
-        ];
+        $di = Di::getDefault();
+        $manager = $di->getShared('modelsManager');
+        $phql = 'select user.id,user.nickname,user.status as user_status,' .
+        '';
+        $list = $manager->createBuilder()
+            ->from('TopCms\Apps\User\Models\User')
+            ->join('TopCms\Apps\User\Models\Role')
+            ->limit($pageSize, ($page - 1) * $pageSize)
+            ->getQuery()
+            ->execute()->toArray();
+        return $list;
+    }
+
+    public function userTotal()
+    {
+        return count(User::find());
     }
 }

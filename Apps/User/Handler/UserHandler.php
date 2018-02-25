@@ -62,7 +62,7 @@ class UserHandler extends BaseHandler
             'pagination' => [
                 'current' => intval($currentPage),
                 'pageSize' => intval($pageSize),
-                'total' => 400,
+                'total' => $userInfo->userTotal(),
             ]
         ]);
     }

@@ -52,4 +52,11 @@ class LoginHandler extends BaseHandler
             $this->failJson(['msg' => '用户名或密码错误！！']);
         }
     }
+
+    public function logoutAction($params)
+    {
+        $login = new Login();
+        $login->logout();
+        $this->successJson(['msg' => 'logout success!']);
+    }
 }

@@ -55,7 +55,6 @@ class UserLayout extends React.PureComponent {
                         (
                             <Route
                                 key={item.key}
-                                path={item.path}
                                 component={item.component}
                                 redirectPath="/exception/403"
                             />

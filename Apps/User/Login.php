@@ -95,6 +95,14 @@ class Login
         return true;
     }
 
+    public function logout()
+    {
+        $this->session->remove('login_token');
+        $this->session->remove('user_id');
+        $this->session->remove('login_type');
+        $this->session->remove('identifier');
+    }
+
     protected function generateLoginToken()
     {
         $request = Di::getDefault()->get('request');

@@ -24,7 +24,7 @@ function RouterConfig({ history, app }) {
       <Router history={history}>
         <Switch>
             <Redirect exact from="/" to="/article/category" />
-            <AuthorizeRouteComponent
+            <AuthorizeRouteComponent history={history}
               path={'/'}
           />
         </Switch>

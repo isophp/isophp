@@ -17,6 +17,14 @@ export default {
     },
 
     effects: {
+        * logout({payload, success, fail}, {call, put}){
+            const response = yield call(adminApiGate, {
+                ...defaultParams,
+                method: 'logout',
+                payload: payload
+            });
+            window.location = '/';
+        },
         * login({payload, success, fail}, {call, put}) {
             yield put({
                 type: 'loading',
@@ -26,7 +34,7 @@ export default {
                 ...defaultParams,
                 method: 'login',
                 payload: payload
-            })
+            });
             yield put({
                 type: 'loading',
                 payload: false
