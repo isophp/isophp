@@ -79,11 +79,10 @@ class ExceptionHandler
         $response = $di->getResponse();
         if ($e instanceof ApiException){
             $response->setStatusCode($e->getHttpCode());
-            $response->setContent(json_encode([
+            $response->setJsonContent(json_encode([
                 'status' => $e->getHttpCode(),
                 'msg' => $e->getMessage(),
             ]));
-            $response->setContentType('application/json');
             $response->send();
         }else{
             //否则返回html数据
@@ -97,7 +96,7 @@ class ExceptionHandler
         $response = $di->getResponse();
         if ($e instanceof ApiException) {
             $response->setStatusCode($e->getHttpCode());
-            $response->setContent(json_encode([
+            $response->setJsonContent(json_encode([
                 'status' => $e->getHttpCode(),
                 'msg' => $e->getMessage(),
             ]));

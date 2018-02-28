@@ -9,8 +9,15 @@
 
 namespace TopCms\Apps\User\Handler;
 
+use TopCms\Apps\User\RoleInfo;
+use TopCms\Framework\Mvc\Handler\BaseHandler;
 
-class RoleHandler
+class RoleHandler extends BaseHandler
 {
-
+    public function listAction()
+    {
+        $roleInfo = new RoleInfo();
+        $list = $roleInfo->getRoleList();
+        $this->successJson($list);
+    }
 }

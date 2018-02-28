@@ -8,6 +8,7 @@ namespace TopCms\Apps\User\Handler;
 
 use Phalcon\Di;
 use TopCms\Apps\User\Acl;
+use TopCms\Apps\User\Tools;
 use TopCms\Apps\User\UserInfo;
 use TopCms\Framework\Exceptions\ApiParamErrorException;
 use TopCms\Framework\Mvc\Handler\BaseHandler;
@@ -65,5 +66,34 @@ class UserHandler extends BaseHandler
                 'total' => $userInfo->userTotal(),
             ]
         ]);
+    }
+
+    /**
+     * 添加用户名密码登录的用户
+     * @param $params
+     * @throws ApiParamErrorException
+     */
+    public function addAction($params)
+    {
+        $nickname = $params['nickname'] ?? '';
+        $roleId = $params['roleId'] ?? '';
+        $username = $params['username'] ?? '';
+        $credential = $params['credential'] ?? '';
+        if (empty($nickname) || empty($roleId) || empty($username)) {
+            throw new ApiParamErrorException('param error');
+        }
+        if (Tools::checkIdentifierType($username) !== 'username') {
+            throw new ApiParamErrorException('username is invalid');
+        }
+        if (!Tools::isValidPassword($credential)) {
+            throw new ApiParamErrorException('password is invalid');
+        }
+        $userInfo = new UserInfo();
+        list($status, $message) = $userInfo->addUser($username, $credential, 'username', $roleId, $nickname);
+        if ($status) {
+            $this->successJson($message);
+        } else {
+            $this->failJson(['msg' => $message]);
+        }
     }
 }

@@ -184,7 +184,7 @@ export default class FriendLink extends PureComponent {
                     <FormItem
                         labelCol={{span: 4}}
                         wrapperCol={{span: 15}}
-                        label="url"
+                        label="排序权重"
                     >
                         {getFieldDecorator('sort', {
                             rules: [

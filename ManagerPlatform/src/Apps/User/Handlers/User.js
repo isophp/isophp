@@ -1,4 +1,6 @@
 import {adminApiGate} from '../../../services/api';
+import dealResponse from '../../../utils/dealResponse';
+
 // todo 如何简化
 const defaultParams = {
     module: 'User',
@@ -19,6 +21,23 @@ export default {
     },
 
     effects: {
+        * add({payload, success, fail}, {call, put})
+        {
+            yield put({
+                type: 'changeLoading',
+                payload: true,
+            });
+            const response = yield call(adminApiGate, {
+                ...defaultParams,
+                method: 'add',
+                payload: payload
+            });
+            yield put({
+                type: 'changeLoading',
+                payload: false,
+            });
+            dealResponse(response, success, fail);
+        },
         * list({ payload, callback }, {select, call, put}) {
             yield put({
                 type: 'changeLoading',

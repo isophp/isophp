@@ -1,78 +1,86 @@
-import React, { PureComponent } from 'react';
-import { connect } from 'dva';
-import { Row, Col, Card, Form, Input, Select, Icon, Button, Dropdown, Menu, InputNumber, DatePicker, Modal, message } from 'antd';
+import React, {PureComponent} from 'react';
+import {connect} from 'dva';
+import {
+    Spin,
+    Card,
+    Form,
+    Input,
+    Select,
+    Icon,
+    Button,
+    Dropdown,
+    Menu,
+    Modal,
+    message
+} from 'antd';
 import UserListTable from '../Components/UserListTable';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
 
 import styles from './UserManager.less';
 
 const FormItem = Form.Item;
-const { Option } = Select;
+const {Option} = Select;
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
 @connect(state => ({
     User: state.User,
+    Role: state.Role
 }))
 @Form.create()
 export default class TableList extends PureComponent {
     state = {
-        addInputValue: '',
         modalVisible: false,
-        expandForm: false,
         selectedRows: [],
         formValues: {},
+        pagination: {
+            currentPage: 1,
+            pageSize: 10,
+        },
+        sorter: {}
     };
 
     componentDidMount() {
-        const { dispatch } = this.props;
+        const {dispatch} = this.props;
         dispatch({
             type: 'User/list',
         });
     }
 
     handleStandardTableChange = (pagination, filtersArg, sorter) => {
-        const { dispatch } = this.props;
-        const { formValues } = this.state;
-
-        const filters = Object.keys(filtersArg).reduce((obj, key) => {
-            const newObj = { ...obj };
-            newObj[key] = getValue(filtersArg[key]);
-            return newObj;
-        }, {});
-
-        const query = {
-            currentPage: pagination.current,
-            pageSize: pagination.pageSize,
-            ...formValues,
-            ...filters,
-        };
+        const {dispatch} = this.props;
+        const {formValues} = this.state;
+        const query = {};
         if (sorter.field) {
-            query.sorter = `${sorter.field}_${sorter.order}`;
+            query.sorter = {
+                field: sorter.field,
+                order: sorter.order
+            };
         }
+        query.pagination = {
+            currentPage: pagination.current,
+            pageSize: pagination.pageSize
+        };
+        this.setState(query, this.fetch);
+    };
+
+    fetch() {
+        const {dispatch} = this.props;
+        const {formValues} = this.state;
+        const query = {
+            currentPage: this.state.pagination.currentPage,
+            pageSize: this.state.pagination.pageSize,
+            ...formValues,
+            ...this.state.sorter,
+        };
         dispatch({
             type: 'User/list',
             payload: query,
         });
-    }
-
-    handleFormReset = () => {
-        const { form, dispatch } = this.props;
-        form.resetFields();
-        dispatch({
-            type: 'User/list',
-            payload: {},
-        });
-    }
-
-    toggleForm = () => {
-        this.setState({
-            expandForm: !this.state.expandForm,
-        });
-    }
+    };
 
     handleMenuClick = (e) => {
-        const { dispatch } = this.props;
-        const { selectedRows } = this.state;
+        const {dispatch} = this.props;
+        const {selectedRows} = this.state;
 
         if (!selectedRows) return;
 
@@ -99,173 +107,62 @@ export default class TableList extends PureComponent {
         this.setState({
             selectedRows: rows,
         });
-    }
-
-    handleSearch = (e) => {
-        e.preventDefault();
-
-        const { dispatch, form } = this.props;
-
-        form.validateFields((err, fieldsValue) => {
-            if (err) return;
-
-            const values = {
-                ...fieldsValue,
-                updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-            };
-
-            this.setState({
-                formValues: values,
-            });
-
-            dispatch({
-                type: 'User/remove',
-                payload: values,
-            });
-        });
-    }
-
+    };
     handleModalVisible = (flag) => {
+        const {dispatch} = this.props;
         this.setState({
             modalVisible: !!flag,
         });
-    }
-
-    handleAddInput = (e) => {
-        this.setState({
-            addInputValue: e.target.value,
-        });
-    }
-
+        if (flag) {
+            dispatch({
+                type: 'Role/list'
+            });
+        }
+    };
     handleAdd = () => {
-        this.props.dispatch({
-            type: 'User/add',
-            payload: {
-                description: this.state.addInputValue,
-            },
+
+        const {dispatch} = this.props;
+        const fetch = this.fetch.bind(this);
+        this.props.form.validateFields((err, values) => {
+            if (err) {
+                return;
+            } else {
+                if (values.password1 != values.password2) {
+                    message.error('两次密码不一致！');
+                    return;
+                }
+                dispatch({
+                    type: 'User/add',
+                    payload: {
+                        username: values.username,
+                        nickname: values.nickname,
+                        roleId: values.roleId,
+                        credential: values.password1
+                    },
+                    success: () => {
+                        message.success('添加成功');
+                        this.setState({
+                            modalVisible: false,
+                        });
+                        fetch();
+                    }
+                });
+            }
         });
-
-        message.success('添加成功');
-        this.setState({
-            modalVisible: false,
-        });
-    }
-
-    renderSimpleForm() {
-        const { getFieldDecorator } = this.props.form;
-        return (
-            <Form onSubmit={this.handleSearch} layout="inline">
-                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                    <Col md={8} sm={24}>
-                        <FormItem label="规则编号">
-                            {getFieldDecorator('no')(
-                                <Input placeholder="请输入" />
-                            )}
-                        </FormItem>
-                    </Col>
-                    <Col md={8} sm={24}>
-                        <FormItem label="使用状态">
-                            {getFieldDecorator('status')(
-                                <Select placeholder="请选择" style={{ width: '100%' }}>
-                                    <Option value="0">关闭</Option>
-                                    <Option value="1">运行中</Option>
-                                </Select>
-                            )}
-                        </FormItem>
-                    </Col>
-                    <Col md={8} sm={24}>
-            <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">查询</Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-              <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                展开 <Icon type="down" />
-              </a>
-            </span>
-                    </Col>
-                </Row>
-            </Form>
-        );
-    }
-
-    renderAdvancedForm() {
-        const { getFieldDecorator } = this.props.form;
-        return (
-            <Form onSubmit={this.handleSearch} layout="inline">
-                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                    <Col md={8} sm={24}>
-                        <FormItem label="规则编号">
-                            {getFieldDecorator('no')(
-                                <Input placeholder="请输入" />
-                            )}
-                        </FormItem>
-                    </Col>
-                    <Col md={8} sm={24}>
-                        <FormItem label="使用状态">
-                            {getFieldDecorator('status')(
-                                <Select placeholder="请选择" style={{ width: '100%' }}>
-                                    <Option value="0">关闭</Option>
-                                    <Option value="1">运行中</Option>
-                                </Select>
-                            )}
-                        </FormItem>
-                    </Col>
-                    <Col md={8} sm={24}>
-                        <FormItem label="调用次数">
-                            {getFieldDecorator('number')(
-                                <InputNumber style={{ width: '100%' }} />
-                            )}
-                        </FormItem>
-                    </Col>
-                </Row>
-                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                    <Col md={8} sm={24}>
-                        <FormItem label="更新日期">
-                            {getFieldDecorator('date')(
-                                <DatePicker style={{ width: '100%' }} placeholder="请输入更新日期" />
-                            )}
-                        </FormItem>
-                    </Col>
-                    <Col md={8} sm={24}>
-                        <FormItem label="使用状态">
-                            {getFieldDecorator('status3')(
-                                <Select placeholder="请选择" style={{ width: '100%' }}>
-                                    <Option value="0">关闭</Option>
-                                    <Option value="1">运行中</Option>
-                                </Select>
-                            )}
-                        </FormItem>
-                    </Col>
-                    <Col md={8} sm={24}>
-                        <FormItem label="使用状态">
-                            {getFieldDecorator('status4')(
-                                <Select placeholder="请选择" style={{ width: '100%' }}>
-                                    <Option value="0">关闭</Option>
-                                    <Option value="1">运行中</Option>
-                                </Select>
-                            )}
-                        </FormItem>
-                    </Col>
-                </Row>
-                <div style={{ overflow: 'hidden' }}>
-          <span style={{ float: 'right', marginBottom: 24 }}>
-            <Button type="primary" htmlType="submit">查询</Button>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-            <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-              收起 <Icon type="up" />
-            </a>
-          </span>
-                </div>
-            </Form>
-        );
-    }
-
-    renderForm() {
-        return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
-    }
+    };
 
     render() {
-        const { User: { loading: userLoading, data } } = this.props;
-        const { selectedRows, modalVisible, addInputValue } = this.state;
+        const {
+            User: {loading: userLoading, data},
+            Role: {loading: roleLoading, list: roleList}
+        } = this.props;
+        const {selectedRows, modalVisible, addInputValue} = this.state;
+        const {getFieldDecorator} = this.props.form;
+
+        const roleOptions = [];
+        roleList.forEach(function (item) {
+            roleOptions.push(<Option value={item.id} key={item.id}>{item.name}</Option>);
+        });
 
         const menu = (
             <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -278,9 +175,6 @@ export default class TableList extends PureComponent {
             <PageHeaderLayout title="查询表格">
                 <Card bordered={false}>
                     <div className={styles.tableList}>
-                        <div className={styles.tableListForm}>
-                            {this.renderForm()}
-                        </div>
                         <div className={styles.tableListOperator}>
                             <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>新建</Button>
                             {
@@ -289,7 +183,7 @@ export default class TableList extends PureComponent {
                     <Button>批量操作</Button>
                     <Dropdown overlay={menu}>
                       <Button>
-                        更多操作 <Icon type="down" />
+                        更多操作 <Icon type="down"/>
                       </Button>
                     </Dropdown>
                   </span>
@@ -306,18 +200,97 @@ export default class TableList extends PureComponent {
                     </div>
                 </Card>
                 <Modal
-                    title="新建规则"
+                    title="添加用户"
                     visible={modalVisible}
                     onOk={this.handleAdd}
                     onCancel={() => this.handleModalVisible()}
                 >
-                    <FormItem
-                        labelCol={{ span: 5 }}
-                        wrapperCol={{ span: 15 }}
-                        label="描述"
-                    >
-                        <Input placeholder="请输入" onChange={this.handleAddInput} value={addInputValue} />
-                    </FormItem>
+                    <Spin spinning={roleLoading}>
+                        <Form>
+                            <FormItem
+                                labelCol={{span: 4}}
+                                wrapperCol={{span: 15}}
+                                label="用户名"
+                            >
+                                {getFieldDecorator('username', {
+                                    rules: [
+                                        {required: true, message: '请输入5-20位字母数字组成的用户名'},
+                                        {pattern: /^[\w]{5,20}$/, message: '请输入5-20位字母数字组成的用户名'}
+                                    ],
+                                })(
+                                    <Input placeholder="5-20位字母数字下划线组成的用户名"/>
+                                )}
+                            </FormItem>
+
+                            <FormItem
+                                labelCol={{span: 4}}
+                                wrapperCol={{span: 15}}
+                                label="nickname"
+                            >
+                                {getFieldDecorator('nickname', {
+                                    rules: [
+                                        {required: true, message: '请输入昵称'},
+                                        {pattern: /^[\u4e00-\u9fa5\w]{2,10}$/, message: '请输入2-10位昵称'},
+                                    ],
+                                })(
+                                    <Input placeholder="请输入昵称"/>
+                                )}
+                            </FormItem>
+
+                            <FormItem
+                                labelCol={{span: 4}}
+                                wrapperCol={{span: 15}}
+                                label="角色"
+                            >
+                                {getFieldDecorator('roleId', {
+                                    rules: [
+                                        {required: true, message: '请选择角色'},
+                                        {pattern: /^[\d]{1,5}$/}
+                                    ],
+                                })(
+                                    <Select style={{width: 120}}>
+                                        {roleOptions}
+                                    </Select>
+                                )}
+                            </FormItem>
+
+                            <FormItem
+                                labelCol={{span: 4}}
+                                wrapperCol={{span: 15}}
+                                label="登录密码"
+                            >
+                                {getFieldDecorator('password1', {
+                                    rules: [
+                                        {required: true, message: '请输入登录密码'},
+                                        {
+                                            pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,20}$/,
+                                            message: '8-20位并包含大小字母数字'
+                                        }
+                                    ],
+                                })(
+                                    <Input placeholder="请输入密码" type="password"/>
+                                )}
+                            </FormItem>
+
+                            <FormItem
+                                labelCol={{span: 4}}
+                                wrapperCol={{span: 15}}
+                                label="登录密码"
+                            >
+                                {getFieldDecorator('password2', {
+                                    rules: [
+                                        {required: true, message: '请再次输入登录密码'},
+                                        {
+                                            pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,20}$/,
+                                            message: '8-20位并包含大小字母数字'
+                                        }
+                                    ],
+                                })(
+                                    <Input placeholder="请再次输入密码" type="password"/>
+                                )}
+                            </FormItem>
+                        </Form>
+                    </Spin>
                 </Modal>
             </PageHeaderLayout>
         );

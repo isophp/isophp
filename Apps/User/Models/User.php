@@ -29,6 +29,11 @@ class User extends BaseModel
             'TopCms\Apps\User\Models\Role',
             "id"
         );
+        $this->hasMany(
+            'id',
+            'TopCms\Apps\User\Models\Auth',
+            "user_id"
+        );
         $this->setSource("app_user_user");
     }
 

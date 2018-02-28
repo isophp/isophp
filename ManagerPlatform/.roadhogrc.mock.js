@@ -1,4 +1,3 @@
-var proxy = require('express-http-proxy');
 const formidable = require('formidable');
 const fs = require('fs');
 const superagent = require('superagent');

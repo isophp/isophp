@@ -8,7 +8,6 @@ const statusMap = ['default', 'processing', 'success', 'error'];
 class UserListTable extends PureComponent {
     state = {
         selectedRowKeys: [],
-        totalCallNo: 0,
     };
 
     componentWillReceiveProps(nextProps) {
@@ -16,21 +15,17 @@ class UserListTable extends PureComponent {
         if (nextProps.selectedRows.length === 0) {
             this.setState({
                 selectedRowKeys: [],
-                totalCallNo: 0,
             });
         }
     }
 
     handleRowSelectChange = (selectedRowKeys, selectedRows) => {
-        const totalCallNo = selectedRows.reduce((sum, val) => {
-            return sum + parseFloat(val.callNo, 10);
-        }, 0);
 
         if (this.props.onSelectRow) {
             this.props.onSelectRow(selectedRows);
         }
 
-        this.setState({selectedRowKeys, totalCallNo});
+        this.setState({selectedRowKeys});
     }
 
     handleTableChange = (pagination, filters, sorter) => {
@@ -42,7 +37,7 @@ class UserListTable extends PureComponent {
     }
 
     render() {
-        const {selectedRowKeys, totalCallNo} = this.state;
+        const {selectedRowKeys} = this.state;
         const {data: {list, pagination}, loading} = this.props;
 
         const columns = [
@@ -51,14 +46,31 @@ class UserListTable extends PureComponent {
                 dataIndex: 'id',
             },
             {
-                title: '姓名',
-                dataIndex: 'name',
+                title: '昵称',
+                dataIndex: 'nickname',
             },
             {
-                title: '职业',
-                dataIndex: 'career',
-            }, {
-                title: '头像',
+                title: '登录类型',
+                dataIndex: 'login_type',
+            },
+            {
+                title: '登录标识',
+                dataIndex: 'identifier',
+            },
+            {
+                title: '角色',
+                dataIndex: 'role_name',
+            },
+            {
+                title: '用户状态',
+                dataIndex: 'user_status',
+            },
+            {
+                title: '登录状态',
+                dataIndex: 'auth_status',
+            },
+            {
+                title: 'deng',
                 dataIndex: 'avatar',
                 render: val => (<div><img src={val} className={styles.avatar} /></div>)
             },
@@ -95,7 +107,6 @@ class UserListTable extends PureComponent {
                         message={(
                             <div>
                                 已选择 <a style={{fontWeight: 600}}>{selectedRowKeys.length}</a> 项&nbsp;&nbsp;
-                                服务调用总计 <span style={{fontWeight: 600}}>{totalCallNo}</span> 万
                                 <a onClick={this.cleanSelectedKeys} style={{marginLeft: 24}}>清空</a>
                             </div>
                         )}

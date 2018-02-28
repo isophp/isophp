@@ -16,7 +16,8 @@ class Tools
 {
     protected static $email = '/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/';
     protected static $phone = '/^1[\d]{10}$/';
-    protected static $username = '/^[\w]{5,20}$/';
+    protected static $username = '/^[\w]{2,20}$/';
+    protected static $password = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,20}$/';
 
     public static function isInvalidEmail($email)
     {
@@ -45,5 +46,10 @@ class Tools
             return 'username';
         }
         return false;
+    }
+
+    public static function isValidPassword($password)
+    {
+        return (preg_match(self::$password, $password));
     }
 }

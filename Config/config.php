@@ -83,7 +83,7 @@ return new \Phalcon\Config([
                     'path' => '/site/index',
                     'page' => 'UserManager',
                     'name' => '系统状态',
-                    'handlers' => ['User'],
+                    'handlers' => ['User', 'Role'],
                     'icon' => 'profile'
                 ],
                 [
