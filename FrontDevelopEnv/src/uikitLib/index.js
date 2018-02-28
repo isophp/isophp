@@ -1,0 +1,63 @@
+import Breadcrumb from './Breadcrumb'
+import BreadcrumbItem from './BreadcrumbItem'
+import Button from './Button'
+import ButtonCheckbox from './ButtonCheckbox'
+import ButtonRadio from './ButtonRadio'
+import Calendar from './Calendar'
+import Datepicker from './Datepicker'
+import DatepickerDrop from './DatepickerDrop'
+import Dropdown from './Dropdown'
+import Modal from './Modal'
+import Offcanvas from './Offcanvas'
+import Pagination from './Pagination'
+import Picker from './Picker'
+import PickerDrop from './PickerDrop'
+import Subnav from './Subnav'
+import SubnavItem from './SubnavItem'
+import Switcher from './Switcher'
+import SwitcherItem from './SwitcherItem'
+import Table from './Table'
+import Tabs from './Tabs'
+import TabsItem from './TabsItem'
+import TabsVertical from './TabsVertical'
+import Upload from './Upload'
+
+const Vuikit = {
+  Breadcrumb,
+  BreadcrumbItem,
+  Button,
+  ButtonCheckbox,
+  ButtonRadio,
+  Calendar,
+  Datepicker,
+  DatepickerDrop,
+  Dropdown,
+  Modal,
+  Offcanvas,
+  Pagination,
+  Picker,
+  PickerDrop,
+  Subnav,
+  SubnavItem,
+  Switcher,
+  SwitcherItem,
+  Table,
+  Tabs,
+  TabsItem,
+  TabsVertical,
+  Upload,
+  install (Vue) {
+    const keys = Object.keys(this)
+    keys.pop() // remove 'install' from keys
+    let i = keys.length
+    while (i--) {
+      Vue.component(`Vk${keys[i]}`, this[keys[i]])
+    }
+  }
+}
+
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(Vuikit)
+}
+
+export default Vuikit

@@ -13,7 +13,7 @@ return [
         'action' => 'register',
         'auth' => 'any',
     ],
-    '/login' => [
+    '/users/login' => [
         'controller' => 'Index',
         'action' => 'login',
         'auth' => 'any',

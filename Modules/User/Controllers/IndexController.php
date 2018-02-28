@@ -20,10 +20,7 @@ class IndexController extends BaseController
 
     public function loginAction()
     {
-        $this->responseJson([
-            'ss' => 'asdf',
-            'asdfasd' => '111',
-        ]);
+        $this->view->pick('users/index');
     }
 
     public function registerAction()
