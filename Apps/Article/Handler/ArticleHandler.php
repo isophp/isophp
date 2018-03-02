@@ -7,6 +7,7 @@
 namespace TopCms\Apps\Article\Handler;
 use TopCms\Apps\Article\ArticleInfo;
 use TopCms\Apps\Article\CategoryInfo;
+use TopCms\Apps\User\Login;
 use TopCms\Framework\Exceptions\ApiParamErrorException;
 use TopCms\Framework\Log\Log;
 use TopCms\Framework\Mvc\Handler\BaseHandler;
@@ -23,7 +24,7 @@ class ArticleHandler extends BaseHandler
         $content = $params['content'] ?? '';
         $categoryId = $params['categoryId'] ?? '';
         // todo 获得当前用户
-        $author = 'admin';
+        $author = Login::getCurUserId();
         $status = $params['status'] ?? '';
         $extra = $params['extra'] ?? array();
         $articleInfo = new ArticleInfo();

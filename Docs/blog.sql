@@ -1,7 +1,7 @@
 create table if not exists `app_blog_blog`(
   `id` int not null auto_increment comment '自增id',
   `title` varchar(256) not null comment '文章标题',
-  `content` text not null comment '文章内容',
+  `content` text charset utf8mb4 not null comment '文章内容',
   `intro` varchar(1024) null default '' comment '文章简介',
   `type_id` int not null default 0 comment '文章分类id',
   `author` int not null comment '作者',
@@ -21,6 +21,17 @@ create table if not exists `app_blog_blog`(
 create table if not exists `app_blog_type`(
   `id` int not null auto_increment comment '自增id',
   `name` varchar(16) not null comment '分类名',
+  `status` tinyint not null default 0 comment '状态 0:上线 1:下线',
+  `updated_at` datetime null default null on update current_timestamp comment '更新时间',
+  `created_at` datetime not null default current_timestamp comment '创建时间',
+  primary key (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table if not exists `app_blog_comment`(
+  `id` int not null auto_increment comment '自增id',
+  `content` varchar(1024) charset utf8mb4 not null comment '评论内容',
+  `user_id` int not null comment '用户id',
+  `blog_id` int not null comment '博客id',
   `status` tinyint not null default 0 comment '状态 0:上线 1:下线',
   `updated_at` datetime null default null on update current_timestamp comment '更新时间',
   `created_at` datetime not null default current_timestamp comment '创建时间',

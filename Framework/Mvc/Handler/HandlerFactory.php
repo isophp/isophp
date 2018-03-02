@@ -5,6 +5,7 @@
  * @date: 2018/1/7下午7:03
  */
 namespace TopCms\Framework\Mvc\Handler;
+use Phalcon\Di;
 use TopCms\Framework\Exceptions\ApiNotFoundException;
 
 /**
@@ -15,6 +16,8 @@ class HandlerFactory
     public function call($module, $handler, $method, $payload)
     {
         $handler = $this->getHandler($module, $handler);
+        $di = Di::getDefault();
+        $handler->setDi($di);
         $action = $method . 'Action';
         if (method_exists($handler, $action))
         {

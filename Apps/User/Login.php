@@ -41,6 +41,11 @@ class Login
         return $this->session->get('identifier');
     }
 
+    public static function getCurUserId()
+    {
+        return self::$curUser['id'];
+    }
+
     public function getCurUser()
     {
         if (self::$curUser) {

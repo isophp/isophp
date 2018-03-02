@@ -128,6 +128,31 @@ return new \Phalcon\Config([
                     'icon' => 'file-add'
                 ]
             ]
+        ],
+        [
+        'layout' => 'BasicLayout',
+        'path' => '/openSource',
+        'name' => '开源项目',
+        'icon' => 'user',
+        'pages' => [
+            [
+                'app' => 'OpenSource',
+                'path' => '/openSource/manager',
+                'page' => 'OpenSourceManager',
+                'name' => '开源项目管理',
+                'handlers' => ['OpenSource'],
+                'icon' => 'team'
+            ],
+            [
+                'app' => 'OpenSource',
+                'key' => '/openSource/add/',
+                'path' => '/openSource/add/:openSourceId?',
+                'page' => 'AddOpenSource',
+                'name' => '添加开源项目',
+                'handlers' => ['OpenSource'],
+                'icon' => 'edit',
+            ]
         ]
+    ],
     ]
 ]);

@@ -157,7 +157,6 @@ export default class AddArticle extends PureComponent {
         const {Article:{loading: articleLoading,
             articleInfo:{category_id:categoryId, content, title, id:articleId, cascader}}} = this.props;
         const {Category: {tree}} = this.props;
-        console.log(cascader);
         const options = this.generateCategoryOptions(tree);
         let editor = <div></div>;
         if (!this.props.match.params.articleId || (this.props.match.params.articleId

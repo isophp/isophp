@@ -7,6 +7,7 @@
 namespace TopCms\Framework\Core\FileRef;
 
 use Phalcon\Di;
+use TopCms\Apps\User\Login;
 use TopCms\Framework\Exceptions\SysException;
 use TopCms\Framework\Log\Log;
 
@@ -43,7 +44,7 @@ class FileManager
                     'file_id' => $fileId,
                     'file_source' => $this->fileSource,
                     // todo
-                    'author' => 'admin',
+                    'author' => Login::getCurUserId(),
                     'size' => $file->getSize(),
                     'file_path' => str_replace(PUBLIC_PATH, '', $filePath)
                 ]);

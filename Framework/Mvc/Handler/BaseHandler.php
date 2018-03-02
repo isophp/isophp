@@ -12,6 +12,22 @@ use Phalcon\Di;
  */
 class BaseHandler
 {
+    /**
+     *
+     * @var Di
+     */
+    protected $di;
+
+    public function setDi($di)
+    {
+        $this->di = $di;
+    }
+
+    public function getDi()
+    {
+        return $this->di;
+    }
+
     public function successJson($data)
     {
         $this->responseJson($data, 0);
