@@ -16,3 +16,4 @@ nbproject
 # Test
 /phpunit.xml
 Config/config.dev.php
+public/upload
