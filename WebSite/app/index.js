@@ -1,6 +1,7 @@
 /**
  * Created by liushuai on 2018/2/28.
  */
+import '../css/index.less';
 UIkit.use(UIkitIcons);
 UIkit.notification('Hello world!!!!!!!!');
 

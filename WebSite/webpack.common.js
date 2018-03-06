@@ -3,6 +3,8 @@
  */
 const path=require('path');
 const webpack = require('webpack');
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 const config = {
     entry: {
 
@@ -12,8 +14,8 @@ const config = {
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
-        library:"isophp",
-        publicPath: '/dist/',
+        library:"ISOPHP",
+        publicPath: '/dist/js',
     },
     module: {
         rules: [
@@ -25,16 +27,6 @@ const config = {
                     presets: ["@babel/preset-env"],
                     plugins: ["syntax-dynamic-import"] // 延迟加载
                 }
-            },
-            {
-                test: /\.less$/,
-                use: [{
-                    loader: "style-loader" // creates style nodes from JS strings
-                }, {
-                    loader: "css-loader" // translates CSS into CommonJS
-                }, {
-                    loader: "less-loader" // compiles Less to CSS
-                }]
             }
         ]
     },
@@ -43,8 +35,7 @@ const config = {
             UIkit: 'uikit',
             UIkitIcons: 'uikit/dist/js/uikit-icons'
         }),
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NamedModulesPlugin(),
+        new BundleAnalyzerPlugin()
     ],
     target: 'web',
     externals: [],

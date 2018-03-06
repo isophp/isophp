@@ -70,7 +70,7 @@ class UserListTable extends PureComponent {
                 dataIndex: 'auth_status',
             },
             {
-                title: 'deng',
+                title: '头像',
                 dataIndex: 'avatar',
                 render: val => (<div><img src={val} className={styles.avatar} /></div>)
             },

@@ -1,7 +1,7 @@
 create table if not exists `app_article_content`(
   `id` int not null auto_increment comment '自增id',
   `title` varchar(256) not null comment '文章标题',
-  `content` text not null comment '文章内容',
+  `content` text charset utf8mb4 not null comment '文章内容',
   `category_id` smallint not null comment '分类id',
   `intro` varchar(1024) null default '' comment '文章简介',
   `author` int not null comment '作者',
@@ -63,3 +63,14 @@ create table `app_article_file_12` like `app_article_file`;
 create table `app_article_file_13` like `app_article_file`;
 create table `app_article_file_14` like `app_article_file`;
 create table `app_article_file_15` like `app_article_file`;
+
+create table if not exists `app_article_comment`(
+  `id` int not null auto_increment comment '自增id',
+  `content` varchar(1024) charset utf8mb4 not null comment '评论内容',
+  `user_id` int not null comment '用户id',
+  `article_id` int not null comment '博客id',
+  `status` tinyint not null default 0 comment '状态 0:上线 1:下线',
+  `updated_at` datetime null default null on update current_timestamp comment '更新时间',
+  `created_at` datetime not null default current_timestamp comment '创建时间',
+  primary key (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

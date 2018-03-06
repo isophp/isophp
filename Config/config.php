@@ -7,19 +7,19 @@
 return new \Phalcon\Config([
     'environment' => 'PRODUCTION',
     'database' => [
-        'adapter'     => 'Mysql',
-        'host'        => '127.0.0.1',
-        'username'    => 'root',
-        'password'    => '',
-        'dbname'      => '',
-        'charset'     => 'utf8',
+        'adapter' => 'Mysql',
+        'host' => '127.0.0.1',
+        'username' => 'root',
+        'password' => '',
+        'dbname' => '',
+        'charset' => 'utf8',
     ],
     'application' => [
-        'appName'        => 'iosphp',
-        'cacheDir'       => BASE_PATH . '/Cache/',
-        'middlewareDir'  => BASE_PATH . '/Middleware/',
-        'logDir'         => BASE_PATH . '/Logs/',
-        'maxLogs'        => 30,
+        'appName' => 'iosphp',
+        'cacheDir' => BASE_PATH . '/Cache/',
+        'middlewareDir' => BASE_PATH . '/Middleware/',
+        'logDir' => BASE_PATH . '/Logs/',
+        'maxLogs' => 30,
 
         // This allows the baseUri to be understand project paths that are not in the root directory
         // of the webpspace.  This will break if the public/index.php entry point is moved or
@@ -116,7 +116,7 @@ return new \Phalcon\Config([
                     'path' => '/article/add/:articleId?',
                     'page' => 'AddArticle',
                     'name' => '发表文章',
-                    'handlers' => ['Article','Category'],
+                    'handlers' => ['Article', 'Category'],
                     'icon' => 'edit',
                 ],
                 [
@@ -130,29 +130,54 @@ return new \Phalcon\Config([
             ]
         ],
         [
-        'layout' => 'BasicLayout',
-        'path' => '/openSource',
-        'name' => '开源项目',
-        'icon' => 'user',
-        'pages' => [
-            [
-                'app' => 'OpenSource',
-                'path' => '/openSource/manager',
-                'page' => 'OpenSourceManager',
-                'name' => '开源项目管理',
-                'handlers' => ['OpenSource'],
-                'icon' => 'team'
-            ],
-            [
-                'app' => 'OpenSource',
-                'key' => '/openSource/add/',
-                'path' => '/openSource/add/:openSourceId?',
-                'page' => 'AddOpenSource',
-                'name' => '添加开源项目',
-                'handlers' => ['OpenSource'],
-                'icon' => 'edit',
+            'layout' => 'BasicLayout',
+            'path' => '/openSource',
+            'name' => '开源项目',
+            'icon' => 'user',
+            'pages' => [
+                [
+                    'app' => 'OpenSource',
+                    'path' => '/openSource/manager',
+                    'page' => 'OpenSourceManager',
+                    'name' => '开源项目管理',
+                    'handlers' => ['OpenSource'],
+                    'icon' => 'team'
+                ],
+                [
+                    'app' => 'OpenSource',
+                    'key' => '/openSource/add/',
+                    'path' => '/openSource/add/:openSourceId?',
+                    'page' => 'AddOpenSource',
+                    'name' => '添加开源项目',
+                    'handlers' => ['OpenSource'],
+                    'icon' => 'edit',
+                ]
+            ]
+        ],
+        [
+            'layout' => 'BasicLayout',
+            'path' => '/activity',
+            'name' => '活动',
+            'icon' => 'user',
+            'pages' => [
+                [
+                    'app' => 'Activity',
+                    'path' => '/activity/manager',
+                    'page' => 'ActivityManager',
+                    'name' => '活动管理',
+                    'handlers' => ['Activity'],
+                    'icon' => 'team'
+                ],
+                [
+                    'app' => 'Activity',
+                    'key' => '/activity/add/',
+                    'path' => '/activity/add/:activityId?',
+                    'page' => 'AddActivity',
+                    'name' => '添加开源项目',
+                    'handlers' => ['Activity'],
+                    'icon' => 'edit',
+                ]
             ]
         ]
-    ],
     ]
 ]);

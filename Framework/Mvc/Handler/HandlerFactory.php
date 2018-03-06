@@ -24,7 +24,7 @@ class HandlerFactory
             $ret = call_user_func([$handler, $action], $payload);
             return $ret;
         }
-        throw new ApiNotFoundException('method not exist');
+        throw new ApiNotFoundException("handler:$handler method:$method not exist");
     }
 
     public function getHandler($module, $handlerName = 'Ajax')
@@ -34,6 +34,6 @@ class HandlerFactory
             $handler = new $handlerName();
             return $handler;
         }
-        throw new ApiNotFoundException('handler not exist');
+        throw new ApiNotFoundException("handler:$handlerName not exist");
     }
 }

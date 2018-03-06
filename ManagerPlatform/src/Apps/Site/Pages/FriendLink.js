@@ -114,7 +114,6 @@ export default class FriendLink extends PureComponent {
     };
 
     componentDidMount() {
-        console.log('FriendLink didMount');
         const {dispatch} = this.props;
         dispatch({
             type: 'FriendLink/list',

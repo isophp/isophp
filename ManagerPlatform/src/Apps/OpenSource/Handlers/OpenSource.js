@@ -14,6 +14,7 @@ export default {
     namespace: 'OpenSource',
     state: {
         loading: false,
+        addLoading: false,
         info: {},
         data: {
             list: [],

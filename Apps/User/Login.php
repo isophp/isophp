@@ -43,7 +43,7 @@ class Login
 
     public static function getCurUserId()
     {
-        return self::$curUser['id'];
+        return self::$curUser->id;
     }
 
     public function getCurUser()
