@@ -25,7 +25,7 @@ class TestTask extends Task
     public function mainAction($params)
     {
         echo "脚本测试！！" . "\n";
-        $user = new \TopCms\Apps\User\Models\User();
+        $user = new \TopCms\Apps\User\Models\Users();
         echo "调用model测试！！" . $user->getTableName() . PHP_EOL;
         var_export($params);
     }

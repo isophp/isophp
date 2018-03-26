@@ -8,7 +8,7 @@
  */
 namespace Tests\ModelsTest;
 
-use TopCms\Apps\User\Models\User;
+use TopCms\Apps\User\Models\Users;
 use Phalcon\Di;
 use Tests\UnitTestCase;
 
@@ -17,7 +17,7 @@ class UserTest extends UnitTestCase
 
     public function testFpDeviceModel()
     {
-        $user = new User();
+        $user = new Users();
         $tableName = $user->getTableName();
         $this->assertEquals('User', $tableName);
         $this->assertEquals('user11', $tableName);

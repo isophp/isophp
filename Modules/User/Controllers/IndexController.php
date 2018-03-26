@@ -10,6 +10,7 @@ namespace TopCms\Modules\User\Controllers;
 
 use TopCms\Framework\Mvc\Controller\BaseController;
 use TopCms\Framework\Exceptions\ApiParamErrorException;
+use TopCms\Apps\User\Models\Users;
 
 class IndexController extends BaseController
 {
@@ -20,6 +21,8 @@ class IndexController extends BaseController
 
     public function loginAction()
     {
+        $user_info = Users::findFirst();
+        var_dump($user_info->user_name);exit;
         $this->view->pick('users/index');
     }
 

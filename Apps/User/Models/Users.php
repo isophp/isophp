@@ -12,12 +12,12 @@ use TopCms\Framework\Mvc\Model\BaseModel;
 /**
  * Class Auth
  */
-class User extends BaseModel
+class Users extends BaseModel
 {
 
     public function initialize()
     {
-        $this->setSource("User");
+        $this->setSource("app_users");
     }
 
     public function getTableName()
