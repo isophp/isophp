@@ -58,10 +58,10 @@ isophp/Modules/
 ```
 
 1. 所有的model都放在 Apps/分类/Models/下
-2. Apps/分类/*.php里对应的就是Repository概念，是对该栏目下models的封装
+2. Apps/分类/\*.php里对应的就是Repository概念，是对该栏目下models的封装
 3. 所有的处理后台的接口都放在Apps/分类/Handler/×Handler.php（下面的ant design Apps下面的每个model都和一个Handler一一对应）
 4. 所有网站前端页面，接口都在Modules/分类/Controller/*Controller.php
-5. *Hanlder.php   *Controller.php里操作model都调用Repository概念的类（Apps/分类/*.php）
+5. *Hanlder.php   \*Controller.php里操作model都调用Repository概念的类（Apps/分类/\*.php）
 6. 路由注册都在 Modules/分类/Router.php  
 
 ##### 前端页面路由 
